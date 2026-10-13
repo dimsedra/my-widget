@@ -1,7 +1,7 @@
 ---
 title: "ADR-004: Generic Polymorphic Payload Storage Pattern for Widget Data"
 type: adr
-status: Waiting for Review
+status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, database, schema, convex, storage, zod]
@@ -14,7 +14,7 @@ superseded_by: null
 # ADR-004: Generic Polymorphic Payload Storage Pattern for Widget Data
 
 ## 1. Status & Context
-- **Status**: Waiting for Review (2026-10-13)
+- **Status**: Approved (2026-10-13)
 - **Context**:
   Sistem dirancang sebagai platform widget berbasis add-on yang dapat diperluas sewaktu-waktu. Setiap jenis widget (To-Do List, Days-To-Go Countdown, catatan, pelacak kebiasaan, dsb.) memiliki kebutuhan atribut dan struktur data yang sangat berbeda satu sama lain. Kita memerlukan strategi penyimpanan data di Convex yang:
   1. Mendukung penambahan widget baru tanpa perlu mengubah skema database global setiap kali modul baru dibuat *(Zero Schema Mutation on Add-on)*.

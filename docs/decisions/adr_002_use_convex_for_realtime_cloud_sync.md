@@ -1,7 +1,7 @@
 ---
 title: "ADR-002: Use Convex as Real-Time Cloud BaaS"
 type: adr
-status: Waiting for Review
+status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, backend, cloud, sync, convex]
@@ -14,7 +14,7 @@ superseded_by: null
 # ADR-002: Use Convex as Real-Time Cloud BaaS
 
 ## 1. Status & Context
-- **Status**: Waiting for Review (2026-10-13)
+- **Status**: Approved (2026-10-13)
 - **Context**:
   Data widget (seperti tugas to-do list dan tanggal countdown) perlu disinkronkan secara mulus antar perangkat pengguna (PC desktop, laptop, dan perangkat mobile di masa depan). Sistem membutuhkan basis data berbasis cloud *(Backend-as-a-Service / BaaS)* yang:
   1. Mendukung reaktivitas data instan dua arah *(live reactive subscriptions)* tanpa perlu polling HTTP manual.

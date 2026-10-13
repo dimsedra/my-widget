@@ -1,7 +1,7 @@
 ---
 title: "ADR-003: Isolated Multi-Window Architecture for Desktop Widgets"
 type: adr
-status: Waiting for Review
+status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, desktop, windowing, tauri, webview]
@@ -14,7 +14,7 @@ superseded_by: null
 # ADR-003: Isolated Multi-Window Architecture for Desktop Widgets
 
 ## 1. Status & Context
-- **Status**: Waiting for Review (2026-10-13)
+- **Status**: Approved (2026-10-13)
 - **Context**:
   Sistem widget desktop memerlukan cara untuk menampilkan beberapa widget (To-Do, Countdown, dan widget di masa depan) di atas layar Windows secara simultan. Masing-masing widget harus bisa ditempatkan di koordinat bebas di desktop (misalnya satu di pojok kiri atas dan satu di pojok kanan bawah), memiliki ukuran independen, dan dapat digeser tanpa mengganggu area desktop di sekitarnya.
 

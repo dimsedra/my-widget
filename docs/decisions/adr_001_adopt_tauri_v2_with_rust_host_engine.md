@@ -1,7 +1,7 @@
 ---
 title: "ADR-001: Adopt Tauri v2 with Rust as Host Desktop Engine"
 type: adr
-status: Waiting for Review
+status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, desktop, engine, rust, tauri]
@@ -14,7 +14,7 @@ superseded_by: null
 # ADR-001: Adopt Tauri v2 with Rust as Host Desktop Engine
 
 ## 1. Status & Context
-- **Status**: Waiting for Review (2026-10-13)
+- **Status**: Approved (2026-10-13)
 - **Context**: 
   Aplikasi widget desktop ini dirancang untuk berjalan terus-menerus di latar belakang *(always-on background process)* menempel di wallpaper desktop Windows ala Rainmeter. Dibutuhkan engine desktop yang:
   1. Sangat hemat memori dan CPU saat dalam kondisi diam *(idle)*.
