@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 28
-completed_tasks: 21
+completed_tasks: 22
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[████████████░░░░]` **21 / 28 Tasks Completed (75%)**
+> **Progress Tracker:** `[█████████████░░░]` **22 / 28 Tasks Completed (78%)**
 
 ---
 
@@ -214,17 +214,17 @@ Memperbaiki `ConfigStore::save_position` agar tidak menggunakan pola `remove_fil
 
 ### Scenario 5.2: Tauri Runtime Managed State & IPC Command Registration (Normal Path / Integration)
 Mendaftarkan state `Mutex<ConfigStore>` dan `Mutex<WindowManager>` ke `tauri::Builder::manage` dan meregistrasikan 4 handler perintah IPC (`cmd_load_window_config`, `cmd_save_window_position`, `cmd_open_widget`, `cmd_close_widget`) pada `invoke_handler` di `src-tauri/src/lib.rs`.
-- [ ] **Task 5.2a: [TEST] Write failing integration test verifying Tauri builder registers all commands and managed state**
+- [x] **Task 5.2a: [TEST] Write failing integration test verifying Tauri builder registers all commands and managed state** (`0cfaebb`)
   - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
-  - **Files**: `[NEW] src-tauri/src/tests/runtime_integration_test.rs`
+  - **Files**: `[NEW] src-tauri/src/runtime_tests.rs`
   - **Commit**: `test(runtime): add failing test for registered IPC commands and managed state`
-  - **Verification**: `cargo test tests::runtime_integration_test` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test runtime_tests::test_builder_registers_state_and_handlers` (FAILED as expected: configure_builder not found)
 
-- [ ] **Task 5.2b: [FEAT] Wire managed states and IPC invoke handlers into Tauri Builder**
+- [x] **Task 5.2b: [FEAT] Wire managed states and IPC invoke handlers into Tauri Builder** (`5c41011`)
   - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
-  - **Files**: `[MODIFY] src-tauri/src/lib.rs`
+  - **Files**: `[MODIFY] src-tauri/src/lib.rs`, `[NEW] src-tauri/.cargo/config.toml`
   - **Commit**: `feat(runtime): wire managed states and register all IPC commands in lib.rs`
-  - **Verification**: `cargo test tests::runtime_integration_test` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test runtime_tests::test_builder_registers_state_and_handlers` (PASSED / GREEN in 0.00s)
 
 ### Scenario 5.3: Win32 Desktop Pinning, Taskbar Exemption, and Live Tray Wiring (Core Invariant / Integration)
 Mengaktifkan `"skipTaskbar": true` pada konfigurasi jendela Tauri dan menyambungkan fungsi Win32 `pin_window_to_desktop` serta inisialisasi menu System Tray native ke dalam lifecycle `setup` hook pada runtime Tauri.
