@@ -29,4 +29,45 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
     });
     expect(result?.updatedAt).toBeGreaterThan(0);
   });
+
+  it("should update existing widget record without duplicating rows", async () => {
+    const t = convexTest(schema, modules);
+
+    // Initial insert
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "todo-1",
+      widgetType: "todo",
+      title: "Initial Title",
+      payload: { items: [] },
+    });
+
+    const initial = await t.query(api.widgets.get, { instanceId: "todo-1" });
+    expect(initial).not.toBeNull();
+
+    // Update with new payload
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "todo-1",
+      widgetType: "todo",
+      title: "Updated Title",
+      payload: { items: [{ id: "1", text: "New Task", isCompleted: true }] },
+    });
+
+    // Verify record was patched in-place
+    const updated = await t.query(api.widgets.get, { instanceId: "todo-1" });
+    expect(updated).not.toBeNull();
+    expect(updated?._id).toEqual(initial?._id);
+    expect(updated?.title).toBe("Updated Title");
+    expect(updated?.payload).toEqual({
+      items: [{ id: "1", text: "New Task", isCompleted: true }],
+    });
+
+    // In-memory query to ensure no duplicate rows exist for this instanceId
+    const allMatching = await t.run(async (ctx) => {
+      return await ctx.db
+        .query("widget_data")
+        .withIndex("by_instance", (q) => q.eq("instanceId", "todo-1"))
+        .collect();
+    });
+    expect(allMatching).toHaveLength(1);
+  });
 });
