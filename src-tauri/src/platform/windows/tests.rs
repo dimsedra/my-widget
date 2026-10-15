@@ -33,3 +33,23 @@ fn test_desktop_pinning_flags() {
         "SetWindowPos flags must include SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE"
     );
 }
+
+#[test]
+fn test_tauri_conf_skip_taskbar() {
+    let conf_str = std::fs::read_to_string("tauri.conf.json")
+        .or_else(|_| std::fs::read_to_string("src-tauri/tauri.conf.json"))
+        .expect("failed to read tauri.conf.json");
+    let json: serde_json::Value = serde_json::from_str(&conf_str).expect("valid json");
+    let windows = json["app"]["windows"]
+        .as_array()
+        .expect("app.windows must be an array");
+    assert!(!windows.is_empty());
+    for win in windows {
+        assert_eq!(
+            win["skipTaskbar"].as_bool(),
+            Some(true),
+            "each window config must have skipTaskbar: true"
+        );
+    }
+}
+
