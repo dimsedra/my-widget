@@ -13,7 +13,7 @@ vi.mock("convex/react", () => ({
 describe("useWidgetSync", () => {
   it("should handle loading state when data is being fetched", () => {
     vi.mocked(convexReact.useQuery).mockReturnValue(undefined);
-    vi.mocked(convexReact.useMutation).mockReturnValue(vi.fn());
+    vi.mocked(convexReact.useMutation).mockReturnValue(vi.fn() as any);
 
     const { result } = renderHook(() =>
       useWidgetSync({ instanceId: "todo_1", widgetType: "todo" })
@@ -34,7 +34,7 @@ describe("useWidgetSync", () => {
       updatedAt: 123456,
     };
     vi.mocked(convexReact.useQuery).mockReturnValue(mockDoc);
-    vi.mocked(convexReact.useMutation).mockReturnValue(vi.fn());
+    vi.mocked(convexReact.useMutation).mockReturnValue(vi.fn() as any);
 
     const { result } = renderHook(() =>
       useWidgetSync({ instanceId: "todo_1", widgetType: "todo" })
@@ -47,7 +47,7 @@ describe("useWidgetSync", () => {
   it("should call updatePayload mutation with proper arguments", async () => {
     const mockMutation = vi.fn().mockResolvedValue("doc_123");
     vi.mocked(convexReact.useQuery).mockReturnValue(null);
-    vi.mocked(convexReact.useMutation).mockReturnValue(mockMutation);
+    vi.mocked(convexReact.useMutation).mockReturnValue(mockMutation as any);
 
     const { result } = renderHook(() =>
       useWidgetSync({ instanceId: "todo_1", widgetType: "todo" })
