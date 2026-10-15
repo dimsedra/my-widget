@@ -2,7 +2,7 @@
 title: Implementation Plan - Phase 2 Cloud Backend & Sync Pipeline
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
-parent_srs: docs/srs/20261013_desktop_widget_platform.md
+parent_srs: docs/srs/20261016_desktop_widget_platform.md
 status: completed
 total_tasks: 24
 completed_tasks: 24

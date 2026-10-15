@@ -2,7 +2,7 @@
 title: Implementation Plan - Core Host Platform Engine
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
-parent_srs: docs/srs/20261013_desktop_widget_platform.md
+parent_srs: docs/srs/20261016_desktop_widget_platform.md
 status: completed
 total_tasks: 28
 completed_tasks: 28
@@ -17,7 +17,7 @@ last_updated: 2026-10-15
 
 ## 1. Overview & Architectural Scope
 
-Dokumen ini adalah rencana kerja implementasi teknis untuk **Plan 1: Core Host Platform Engine**, yang diturunkan langsung dari Section 8.1 pada [`docs/srs/20261013_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) dan [`docs/prd/20261013_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/prd/20261013_desktop_widget_platform.md).
+Dokumen ini adalah rencana kerja implementasi teknis untuk **Plan 1: Core Host Platform Engine**, yang diturunkan langsung dari Section 8.1 pada [`docs/srs/20261016_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) dan [`docs/prd/20261013_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/prd/20261013_desktop_widget_platform.md).
 
 Fokus utama rencana kerja ini adalah membangun fondasi aplikasi desktop berbasis Tauri v2 (Rust) yang stabil, ringan, dan terintegrasi langsung dengan API Windows:
 1. Penyiapan scaffolding awal proyek gabungan Tauri v2, Rust host, React, Vite, dan Tailwind CSS.

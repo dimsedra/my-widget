@@ -107,7 +107,7 @@ Aplikasi pencatat konvensional umumnya berbentuk aplikasi jendela standar yang:
 
 ## Section 6: Design & Technical References
 
-- **Arsitektur Teknis**: Terhubung langsung ke Software Requirements Specification di [`docs/srs/20261013_desktop_widget_platform.md`](file:///C:/Users/Dimas%20Edra%20Ar%20Rafi/ProjectHub/my-widget/docs/srs/20261013_desktop_widget_platform.md).
+- **Arsitektur Teknis**: Terhubung langsung ke Software Requirements Specification di [`docs/srs/20261016_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md).
 - **Brand & Visual**: Menggunakan pendekatan clean, translucent/frosted glass (backdrop-blur), typography tegas, dan kontras tinggi untuk keterbacaan di atas berbagai wallpaper Windows.
 
 ---

@@ -5,7 +5,7 @@ status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, desktop, engine, rust, tauri]
-parent_srs: docs/srs/20261013_desktop_widget_platform.md
+parent_srs: docs/srs/20261016_desktop_widget_platform.md
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 supersedes: null
 superseded_by: null
@@ -64,4 +64,4 @@ Rust menangani siklus hidup aplikasi, System Tray, pergeseran jendela, manipulas
 - Pemeriksaan berkala bahwa proses Rust berada di 0% CPU saat tidak ada event kursor aktif.
 
 ## 6. Related Decisions
-- Terkait langsung dengan [`docs/srs/20261013_desktop_widget_platform.md`](file:///C:/Users/Dimas%20Edra%20Ar%20Rafi/ProjectHub/my-widget/docs/srs/20261013_desktop_widget_platform.md) (Bagian `REQ-HOST-001` hingga `REQ-HOST-003`).
+- Terkait langsung dengan [`docs/srs/20261016_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) (Bagian `REQ-HOST-001` hingga `REQ-HOST-003`).

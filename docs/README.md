@@ -16,7 +16,7 @@ Dokumentasi arsitektur, spesifikasi produk, dan rekayasa perangkat lunak untuk p
 
 | Dokumen | Induk PRD | Status | Tanggal Pembaruan | Ringkasan Cakupan |
 | :--- | :--- | :--- | :--- | :--- |
-| [Desktop Widget Platform Technical Specification](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | [PRD](file:///D:/Project%20Hub/my-widget/docs/prd/20261013_desktop_widget_platform.md) | `Approved` | 2026-10-15 | Kontrak teknis Win32 pinning, Tauri v2 IPC, skema generic payload Convex, matriks verifikasi, dan dekomposisi 4 rencana kerja. |
+| [Desktop Widget Platform Technical Specification](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | [PRD](file:///D:/Project%20Hub/my-widget/docs/prd/20261013_desktop_widget_platform.md) | `Approved` | 2026-10-16 | Kontrak teknis Win32 pinning, Tray Flyout Hub, tema mono gray, Tauri v2 IPC, generic payload Convex, dan dekomposisi 5 rencana kerja. |
 
 ---
 
@@ -24,10 +24,11 @@ Dokumentasi arsitektur, spesifikasi produk, dan rekayasa perangkat lunak untuk p
 
 | Dokumen | Induk SRS | Status | Progress | Tanggal Pembaruan | Ringkasan Cakupan |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [Phase 1: Core Host Platform Engine](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase1_core_host_engine.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Completed` | `100% (28/28)` | 2026-10-15 | Inisialisasi Tauri v2, Win32 desktop pinning, multi-window runner, System Tray, dan persistensi config (Audit Remediation). |
-| [Phase 2: Cloud Backend & Sync Pipeline](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase2_cloud_backend_sync.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Completed` | `100% (24/24)` | 2026-10-16 | Setup Convex BaaS, skema generic payload `widget_data`, kueri/mutasi, dan contract tests (Audit Remediation). |
-| `phase3_todo_widget_notification.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-15 | Modul UI To-Do, Zod schema, task CRUD, deadline monitor interval, dan Windows native toast bridge. |
-| `phase4_countdown_widget_polish.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-15 | Modul UI Countdown, kalkulasi delta waktu, form pengaturan klik kanan, audit visual, dan tolok ukur RAM/CPU. |
+| [Phase 1: Core Host Platform Engine](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase1_core_host_engine.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | `Completed` | `100% (28/28)` | 2026-10-15 | Inisialisasi Tauri v2, Win32 desktop pinning, multi-window runner, System Tray, dan persistensi config (Audit Remediation). |
+| [Phase 2: Cloud Backend & Sync Pipeline](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase2_cloud_backend_sync.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | `Completed` | `100% (24/24)` | 2026-10-16 | Setup Convex BaaS, skema generic payload `widget_data`, kueri/mutasi, dan contract tests (Audit Remediation). |
+| `phase3_tray_flyout_widget_hub.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-16 | Jendela flyout tray kompak, antarmuka mono gray (Hub & Config view), toggle visibilitas, dan sinkronisasi setting in-place. |
+| `phase4_todo_widget_notification.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-16 | Modul UI To-Do, Zod schema, task CRUD, deadline monitor interval, dan Windows native toast bridge. |
+| `phase5_countdown_widget_polish.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261016_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-16 | Modul UI Countdown, kalkulasi delta waktu, audit visual mono gray frosted glass, dan tolok ukur RAM/CPU. |
 
 ---
 

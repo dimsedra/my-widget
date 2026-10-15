@@ -5,7 +5,7 @@ status: Approved
 date: 2026-10-13
 deciders: [Eds, Antigravity]
 tags: [architecture, database, schema, convex, storage, zod]
-parent_srs: docs/srs/20261013_desktop_widget_platform.md
+parent_srs: docs/srs/20261016_desktop_widget_platform.md
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 supersedes: null
 superseded_by: null
