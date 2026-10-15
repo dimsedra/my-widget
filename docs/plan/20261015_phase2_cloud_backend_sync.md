@@ -3,15 +3,15 @@ title: Implementation Plan - Phase 2 Cloud Backend & Sync Pipeline
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: in_progress
+status: completed
 total_tasks: 24
-completed_tasks: 18
+completed_tasks: 24
 last_updated: 2026-10-16
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[████████████░░░░]` **18 / 24 Tasks Completed (75%)**
+> **Progress Tracker:** `[████████████████]` **24 / 24 Tasks Completed (100%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -159,40 +159,40 @@ Fokus fase ini adalah menghubungkan frontend React ke provider Convex serta meny
 Fokus fase ini adalah menyelesaikan temuan audit independen: memperbaiki 1 blocker kompilasi TypeScript Convex (TS2341) pada pengujian skema, menambahkan pembersihan lifecycle WebSocket pada `ConvexClientProvider`, dan mengintegrasikan pengecekan tipe data Convex ke dalam pipeline build root.
 
 ### Scenario 4.1: Encapsulation Cast for Convex Schema Index Assertions (Blocker Remediation)
-- [ ] **Task 4.1a: [TEST] Add failing test / compiler verification asserting convex/tsconfig.json passes typechecking**
+- [x] **Task 4.1a: [TEST] Add failing test / compiler verification asserting convex/tsconfig.json passes typechecking** (`871ffd0`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/schema.test.ts`
   - **Commit**: `test(schema): assert convex typecheck passes without private property access`
-  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (EXPECTED: FAIL / RED on TS2341)
+  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (FAILED as expected on TS2341)
 
-- [ ] **Task 4.1b: [FEAT] Cast TableDefinition to inspect runtime indexes without TS2341 error**
+- [x] **Task 4.1b: [FEAT] Cast TableDefinition to inspect runtime indexes without TS2341 error** (`b0f9fec`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/schema.test.ts`
   - **Commit**: `fix(schema): cast table definition for index assertions in tests`
-  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (PASSED / GREEN)
 
 ### Scenario 4.2: Stateful Client Instantiation with WebSocket Lifecycle Cleanup (Advisory Hardening)
-- [ ] **Task 4.2a: [TEST] Add failing test asserting ConvexClientProvider cleans up client on unmount**
+- [x] **Task 4.2a: [TEST] Add failing test asserting ConvexClientProvider cleans up client on unmount** (`716a312`)
   - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
   - **Files**: `[MODIFY] src/providers/ConvexClientProvider.test.tsx`
   - **Commit**: `test(client): assert ConvexClientProvider closes client on unmount`
-  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (FAILED as expected on missing close call)
 
-- [ ] **Task 4.2b: [FEAT] Implement useState lazy initialization and useEffect client.close() cleanup**
+- [x] **Task 4.2b: [FEAT] Implement useState lazy initialization and useEffect client.close() cleanup** (`4fc539d`)
   - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
   - **Files**: `[MODIFY] src/providers/ConvexClientProvider.tsx`
   - **Commit**: `refactor(client): manage Convex client lifecycle with explicit cleanup`
-  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (PASSED / GREEN)
 
 ### Scenario 4.3: Root Build Pipeline Convex Typechecking Integration (Advisory Hardening)
-- [ ] **Task 4.3a: [TEST] Add failing verification for package.json build script lacking convex typecheck**
+- [x] **Task 4.3a: [TEST] Add failing verification for package.json build script lacking convex typecheck** (`c6f7965`)
   - **Fulfills**: `REQ-SYNC-001`
-  - **Files**: `[MODIFY] package.json`
+  - **Files**: `[MODIFY] convex/test.setup.test.ts`
   - **Commit**: `test(build): assert package.json includes convex typecheck verification`
-  - **Verification**: `pnpm run typecheck:convex` (EXPECTED: FAIL / RED when script is missing)
+  - **Verification**: `pnpm run typecheck:convex` (FAILED as expected when script was missing)
 
-- [ ] **Task 4.3b: [FEAT] Wire typecheck:convex and add to root build pipeline**
+- [x] **Task 4.3b: [FEAT] Wire typecheck:convex and add to root build pipeline** (`74fde56`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] package.json`
   - **Commit**: `chore(build): wire convex typecheck into root build pipeline`
-  - **Verification**: `pnpm run build` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm run build` (PASSED / GREEN)
