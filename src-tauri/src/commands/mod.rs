@@ -6,8 +6,10 @@ use crate::config::ConfigStore;
 use std::sync::Mutex;
 
 pub fn load_window_config_logic(store: &Mutex<ConfigStore>) -> Result<AppConfig, String> {
-    // Red phase stub: intentionally not implemented
-    Err("not implemented: load window config command logic".to_string())
+    let mut guard = store
+        .lock()
+        .map_err(|e| format!("mutex lock poisoned: {}", e))?;
+    guard.load()
 }
 
 pub fn save_window_position_logic(
@@ -18,8 +20,10 @@ pub fn save_window_position_logic(
     width: u32,
     height: u32,
 ) -> Result<(), String> {
-    // Red phase stub: intentionally not implemented
-    Err("not implemented: save window position command logic".to_string())
+    let mut guard = store
+        .lock()
+        .map_err(|e| format!("mutex lock poisoned: {}", e))?;
+    guard.save_position(instance_id, x, y, width, height)
 }
 
 #[tauri::command]
