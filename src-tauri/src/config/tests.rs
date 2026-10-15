@@ -85,4 +85,37 @@ fn test_corrupt_config_auto_recovery() {
     assert!(active_content.contains("\"version\": 1"));
 }
 
+#[test]
+fn test_atomic_overwrite_zero_loss() {
+    let temp_dir = tempdir().expect("failed to create temp dir");
+    let config_path = temp_dir.path().join("config.json");
+
+    let mut store = ConfigStore::new(config_path.clone());
+    let _ = store.load().expect("should initialize default");
+
+    // Invariant 1: Store has cached config in memory
+    assert!(store.has_cached_config());
+
+    // Invariant 2: Subsequent save_position updates cache and persists atomically
+    store
+        .save_position("todo_default", 500, 600, 320, 450)
+        .expect("saving position should succeed");
+
+    assert_eq!(
+        store
+            .get_cached_config()
+            .expect("cache should exist")
+            .instances
+            .get("todo_default")
+            .unwrap()
+            .x,
+        500
+    );
+
+    // Invariant 3: Target file exists continuously and temp file does not linger
+    assert!(config_path.exists());
+    let temp_file_path = config_path.with_extension("tmp");
+    assert!(!temp_file_path.exists());
+}
+
 
