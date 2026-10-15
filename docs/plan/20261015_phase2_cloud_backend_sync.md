@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 18
-completed_tasks: 14
+completed_tasks: 16
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[████████████░░░░]` **14 / 18 Tasks Completed (78%)**
+> **Progress Tracker:** `[██████████████░░]` **16 / 18 Tasks Completed (89%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -127,17 +127,17 @@ Fokus fase ini adalah membangun fungsi server Convex untuk kueri data reaktif da
 Fokus fase ini adalah menghubungkan frontend React ke provider Convex serta menyediakan custom hook `useWidgetSync` dengan ketahanan saat offline.
 
 ### Scenario 3.1: ConvexClientProvider Context Wiring (Normal Path)
-- [ ] **Task 3.1a: [TEST] Add failing test asserting ConvexClientProvider renders children with Convex context**
+- [x] **Task 3.1a: [TEST] Add failing test asserting ConvexClientProvider renders children with Convex context** (`eb9d75f`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[NEW] src/providers/ConvexClientProvider.test.tsx`
   - **Commit**: `test(client): assert ConvexClientProvider provides valid context`
-  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (FAILED as expected)
 
-- [ ] **Task 3.1b: [FEAT] Implement ConvexClientProvider reading VITE_CONVEX_URL and wrap App root**
+- [x] **Task 3.1b: [FEAT] Implement ConvexClientProvider reading VITE_CONVEX_URL and wrap App root** (`50c0ae0`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[NEW] src/providers/ConvexClientProvider.tsx`, `[MODIFY] src/App.tsx`
   - **Commit**: `feat(client): implement ConvexClientProvider and wrap App root`
-  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (PASSED / GREEN)
 
 ### Scenario 3.2: useWidgetSync Custom Hook with Offline Resilience (Boundary & Error Resilience)
 - [ ] **Task 3.2a: [TEST] Add failing test asserting useWidgetSync handles loading, data return, and mutation invocation**
