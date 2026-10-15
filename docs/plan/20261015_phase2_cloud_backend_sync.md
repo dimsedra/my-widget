@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 14
-completed_tasks: 8
+completed_tasks: 10
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[████████░░░░░░░░]` **8 / 14 Tasks Completed (57%)**
+> **Progress Tracker:** `[███████████░░░░░]` **10 / 14 Tasks Completed (71%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -82,17 +82,17 @@ Fokus fase ini adalah membangun fungsi server Convex untuk kueri data reaktif da
   - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.3: Multi-Instance Data Isolation (Core Invariant)
-- [ ] **Task 2.3a: [TEST] Add failing test asserting strict data isolation across distinct instanceIds**
+- [x] **Task 2.3a: [TEST] Add failing test asserting strict data isolation across distinct instanceIds** (`3f9f82a`)
   - **Fulfills**: `REQ-SYNC-001`, `ADR-003`
   - **Files**: `[MODIFY] convex/widgets.test.ts`
   - **Commit**: `test(widgets): assert data isolation between distinct widget instances`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (FAILED as expected)
 
-- [ ] **Task 2.3b: [FEAT] Enforce index-based unique instance querying in get query**
+- [x] **Task 2.3b: [FEAT] Enforce index-based unique instance querying in get query** (`0bcf4cb`)
   - **Fulfills**: `REQ-SYNC-001`, `ADR-003`
   - **Files**: `[MODIFY] convex/widgets.ts`
   - **Commit**: `feat(widgets): enforce by_instance index querying for data isolation`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.4: Non-Existent Instance Handling (Boundary - Empty/Null)
 - [ ] **Task 2.4a: [TEST] Add failing test asserting get returns null cleanly for non-existent instanceId**
