@@ -3,15 +3,15 @@ title: Implementation Plan - Phase 2 Cloud Backend & Sync Pipeline
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: completed
-total_tasks: 18
+status: in_progress
+total_tasks: 24
 completed_tasks: 18
-last_updated: 2026-10-15
+last_updated: 2026-10-16
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[████████████████]` **18 / 18 Tasks Completed (100%)**
+> **Progress Tracker:** `[████████████░░░░]` **18 / 24 Tasks Completed (75%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -151,3 +151,48 @@ Fokus fase ini adalah menghubungkan frontend React ke provider Convex serta meny
   - **Files**: `[NEW] src/hooks/useWidgetSync.ts`
   - **Commit**: `feat(client): implement useWidgetSync hook with reactive query and mutation`
   - **Verification**: `pnpm test src/hooks/useWidgetSync.test.tsx` (PASSED / GREEN)
+
+---
+
+## Phase 4: Audit Hardening & Remediation
+
+Fokus fase ini adalah menyelesaikan temuan audit independen: memperbaiki 1 blocker kompilasi TypeScript Convex (TS2341) pada pengujian skema, menambahkan pembersihan lifecycle WebSocket pada `ConvexClientProvider`, dan mengintegrasikan pengecekan tipe data Convex ke dalam pipeline build root.
+
+### Scenario 4.1: Encapsulation Cast for Convex Schema Index Assertions (Blocker Remediation)
+- [ ] **Task 4.1a: [TEST] Add failing test / compiler verification asserting convex/tsconfig.json passes typechecking**
+  - **Fulfills**: `REQ-SYNC-001`
+  - **Files**: `[MODIFY] convex/schema.test.ts`
+  - **Commit**: `test(schema): assert convex typecheck passes without private property access`
+  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (EXPECTED: FAIL / RED on TS2341)
+
+- [ ] **Task 4.1b: [FEAT] Cast TableDefinition to inspect runtime indexes without TS2341 error**
+  - **Fulfills**: `REQ-SYNC-001`
+  - **Files**: `[MODIFY] convex/schema.test.ts`
+  - **Commit**: `fix(schema): cast table definition for index assertions in tests`
+  - **Verification**: `pnpm exec tsc --project convex/tsconfig.json --noEmit` (EXPECTED: PASS / GREEN)
+
+### Scenario 4.2: Stateful Client Instantiation with WebSocket Lifecycle Cleanup (Advisory Hardening)
+- [ ] **Task 4.2a: [TEST] Add failing test asserting ConvexClientProvider cleans up client on unmount**
+  - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
+  - **Files**: `[MODIFY] src/providers/ConvexClientProvider.test.tsx`
+  - **Commit**: `test(client): assert ConvexClientProvider closes client on unmount`
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: FAIL / RED)
+
+- [ ] **Task 4.2b: [FEAT] Implement useState lazy initialization and useEffect client.close() cleanup**
+  - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
+  - **Files**: `[MODIFY] src/providers/ConvexClientProvider.tsx`
+  - **Commit**: `refactor(client): manage Convex client lifecycle with explicit cleanup`
+  - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (EXPECTED: PASS / GREEN)
+
+### Scenario 4.3: Root Build Pipeline Convex Typechecking Integration (Advisory Hardening)
+- [ ] **Task 4.3a: [TEST] Add failing verification for package.json build script lacking convex typecheck**
+  - **Fulfills**: `REQ-SYNC-001`
+  - **Files**: `[MODIFY] package.json`
+  - **Commit**: `test(build): assert package.json includes convex typecheck verification`
+  - **Verification**: `pnpm run typecheck:convex` (EXPECTED: FAIL / RED when script is missing)
+
+- [ ] **Task 4.3b: [FEAT] Wire typecheck:convex and add to root build pipeline**
+  - **Fulfills**: `REQ-SYNC-001`
+  - **Files**: `[MODIFY] package.json`
+  - **Commit**: `chore(build): wire convex typecheck into root build pipeline`
+  - **Verification**: `pnpm run build` (EXPECTED: PASS / GREEN)
