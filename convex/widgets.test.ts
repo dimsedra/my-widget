@@ -4,7 +4,7 @@
 import { describe, it, expect } from "vitest";
 import { convexTest } from "convex-test";
 import schema from "./schema";
-import { get, updatePayload } from "./widgets";
+import { api } from "./_generated/api";
 
 const modules = import.meta.glob("./**/*.*s");
 
@@ -12,14 +12,14 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
   it("should create a new widget record when instanceId does not exist", async () => {
     const t = convexTest(schema, modules);
 
-    await t.mutation(updatePayload, {
+    await t.mutation(api.widgets.updatePayload, {
       instanceId: "todo-1",
       widgetType: "todo",
       title: "My To-Do List",
       payload: { items: [{ id: "item-1", text: "Buy milk", isCompleted: false }] },
     });
 
-    const result = await t.query(get, { instanceId: "todo-1" });
+    const result = await t.query(api.widgets.get, { instanceId: "todo-1" });
     expect(result).not.toBeNull();
     expect(result?.instanceId).toBe("todo-1");
     expect(result?.widgetType).toBe("todo");

@@ -8,13 +8,17 @@
  * @module
  */
 
+import type * as widgets from "../widgets.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  widgets: typeof widgets;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
