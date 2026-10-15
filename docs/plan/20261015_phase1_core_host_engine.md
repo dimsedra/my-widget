@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 14
+completed_tasks: 16
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[███████████░░░░░]` **14 / 20 Tasks Completed (70%)**
+> **Progress Tracker:** `[█████████████░░░]` **16 / 20 Tasks Completed (80%)**
 
 ---
 
@@ -146,17 +146,17 @@ Memastikan setiap jendela yang dibuat menerima atribut `WS_EX_TOOLWINDOW` dan di
 
 ### Scenario 3.2: System Tray Registration and Event Handling (Normal Path)
 Memastikan ikon System Tray terdaftar pada area notifikasi Windows dan menangani aksi klik menu ("Add Widget", "Reset All Positions", "Quit") dengan benar.
-- [ ] **Task 3.2a: [TEST] Write failing test for System Tray menu builder and event router**
+- [x] **Task 3.2a: [TEST] Write failing test for System Tray menu builder and event router** (`5303be2`)
   - **Fulfills**: `REQ-HOST-003`
   - **Files**: `[NEW] src-tauri/src/tray/tests.rs`
   - **Commit**: `test(tray): add failing test for tray menu generation and action routing`
-  - **Verification**: `cargo test tray::tests::test_tray_menu_routing` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test tray::tests::test_tray_menu_routing` (FAILED as expected: not implemented)
 
-- [ ] **Task 3.2b: [FEAT] Implement System Tray controller and event dispatch**
+- [x] **Task 3.2b: [FEAT] Implement System Tray controller and event dispatch** (`ed94a33`)
   - **Fulfills**: `REQ-HOST-003`
-  - **Files**: `[NEW] src-tauri/src/tray/mod.rs`, `[MODIFY] src-tauri/src/main.rs`
+  - **Files**: `[NEW] src-tauri/src/tray/mod.rs`, `[MODIFY] src-tauri/src/lib.rs`
   - **Commit**: `feat(tray): implement system tray menu builder and event listener`
-  - **Verification**: `cargo test tray::tests::test_tray_menu_routing` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test tray::tests::test_tray_menu_routing` (PASSED / GREEN in 0.05s)
 
 ---
 
