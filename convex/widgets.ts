@@ -13,6 +13,7 @@ export const get = query({
   },
 });
 
+// Upserts widget data: patches existing row in-place or inserts new record
 export const updatePayload = mutation({
   args: {
     instanceId: v.string(),
