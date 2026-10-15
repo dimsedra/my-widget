@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 8
+completed_tasks: 10
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[██████░░░░░░░░░░]` **8 / 20 Tasks Completed (40%)**
+> **Progress Tracker:** `[████████░░░░░░░░]` **10 / 20 Tasks Completed (50%)**
 
 ---
 
@@ -98,17 +98,17 @@ Memverifikasi fungsi `cmd_load_window_config` dan `cmd_save_window_position` dap
 
 ### Scenario 2.2: Window Manager Spawn and Instance Tracking (Normal Path / Boundary)
 Memverifikasi pengendali jendela dapat meluncurkan jendela WebView2 baru dengan `instance_id` unik dan mencatat daftarnya di state aplikasi.
-- [ ] **Task 2.2a: [TEST] Write failing test for WindowManager instance tracking**
+- [x] **Task 2.2a: [TEST] Write failing test for WindowManager instance tracking** (`e663f07`)
   - **Fulfills**: `REQ-HOST-001`, ADR-003
   - **Files**: `[NEW] src-tauri/src/window/tests.rs`
   - **Commit**: `test(window): add failing test for window instance tracking and lifecycle`
-  - **Verification**: `cargo test window::tests::test_window_manager_instance_tracking` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test window::tests::test_window_manager_instance_tracking` (FAILED as expected: "not implemented")
 
-- [ ] **Task 2.2b: [FEAT] Implement WindowManager state and window spawn builder**
+- [x] **Task 2.2b: [FEAT] Implement WindowManager state and window spawn builder** (`3c204cb`)
   - **Fulfills**: `REQ-HOST-001`, ADR-003
   - **Files**: `[NEW] src-tauri/src/window/mod.rs`, `[MODIFY] src-tauri/src/commands/mod.rs`
   - **Commit**: `feat(window): implement WindowManager for multi-window instance tracking`
-  - **Verification**: `cargo test window::tests::test_window_manager_instance_tracking` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test window::tests::test_window_manager_instance_tracking` (PASSED / GREEN in 0.00s)
 
 ### Scenario 2.3: Rejection of Invalid Coordinate Bounds or Non-Existent Instance Close (Boundary / Error Path)
 Memastikan perintah penutupan jendela atau pemindahan koordinat memvalidasi argumen input dan mengembalikan error terstruktur jika instance tidak ditemukan atau koordinat berada di luar batas layar yang wajar.
