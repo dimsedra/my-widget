@@ -40,13 +40,45 @@ impl ConfigStore {
 
     pub fn save_position(
         &mut self,
-        _instance_id: &str,
-        _x: i32,
-        _y: i32,
-        _width: u32,
-        _height: u32,
+        instance_id: &str,
+        x: i32,
+        y: i32,
+        width: u32,
+        height: u32,
     ) -> Result<(), String> {
-        // Red phase stub: intentionally not implemented
-        Err("not implemented: atomic save window position".to_string())
+        let mut config = self.load()?;
+        if let Some(instance) = config.instances.get_mut(instance_id) {
+            instance.x = x;
+            instance.y = y;
+            instance.width = width;
+            instance.height = height;
+        } else {
+            config.instances.insert(
+                instance_id.to_string(),
+                models::WindowInstanceConfig {
+                    widget_type: "unknown".to_string(),
+                    x,
+                    y,
+                    width,
+                    height,
+                    visible: true,
+                },
+            );
+        }
+
+        let serialized = serde_json::to_string_pretty(&config)
+            .map_err(|e| format!("failed to serialize config: {}", e))?;
+
+        let temp_path = self.config_path.with_extension("tmp");
+        fs::write(&temp_path, serialized)
+            .map_err(|e| format!("failed to write temporary config: {}", e))?;
+
+        if self.config_path.exists() {
+            let _ = fs::remove_file(&self.config_path);
+        }
+        fs::rename(&temp_path, &self.config_path)
+            .map_err(|e| format!("failed to replace config file atomically: {}", e))?;
+
+        Ok(())
     }
 }
