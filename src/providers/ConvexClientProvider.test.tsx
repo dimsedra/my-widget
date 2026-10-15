@@ -1,8 +1,8 @@
 // Tests for ConvexClientProvider
 // Why: Enforces REQ-SYNC-001 providing reactive Convex client context to the React tree.
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { useConvex } from "convex/react";
+import { useConvex, ConvexReactClient } from "convex/react";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 
 function TestConsumer() {
@@ -25,5 +25,18 @@ describe("ConvexClientProvider", () => {
 
     expect(screen.getByText("Consumer Rendered")).toBeInTheDocument();
     expect(screen.getByText("Has Client: yes")).toBeInTheDocument();
+  });
+
+  it("should close the ConvexReactClient connection when unmounted", () => {
+    const closeSpy = vi.spyOn(ConvexReactClient.prototype, "close");
+    const { unmount } = render(
+      <ConvexClientProvider url="https://mock-test.convex.cloud">
+        <TestConsumer />
+      </ConvexClientProvider>
+    );
+
+    expect(closeSpy).not.toHaveBeenCalled();
+    unmount();
+    expect(closeSpy).toHaveBeenCalled();
   });
 });
