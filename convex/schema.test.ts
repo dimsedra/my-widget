@@ -17,7 +17,7 @@ describe("Convex Schema: widget_data", () => {
     expect(validator.fields.payload).toBeDefined();
     expect(validator.fields.updatedAt).toBeDefined();
 
-    const indexes = schema.tables.widget_data.indexes;
+    const indexes = (schema.tables.widget_data as any).indexes;
     expect(indexes).toBeDefined();
 
     // Verify index by_instance exists
