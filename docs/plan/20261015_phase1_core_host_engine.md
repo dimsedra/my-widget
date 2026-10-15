@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 10
+completed_tasks: 12
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[████████░░░░░░░░]` **10 / 20 Tasks Completed (50%)**
+> **Progress Tracker:** `[█████████░░░░░░░]` **12 / 20 Tasks Completed (60%)**
 
 ---
 
@@ -112,17 +112,17 @@ Memverifikasi pengendali jendela dapat meluncurkan jendela WebView2 baru dengan 
 
 ### Scenario 2.3: Rejection of Invalid Coordinate Bounds or Non-Existent Instance Close (Boundary / Error Path)
 Memastikan perintah penutupan jendela atau pemindahan koordinat memvalidasi argumen input dan mengembalikan error terstruktur jika instance tidak ditemukan atau koordinat berada di luar batas layar yang wajar.
-- [ ] **Task 2.3a: [TEST] Write failing test for invalid coordinate bounds and unknown instance rejection**
+- [x] **Task 2.3a: [TEST] Write failing test for invalid coordinate bounds and unknown instance rejection** (`f9034bb`)
   - **Fulfills**: `REQ-HOST-001`, `REQ-CONFIG-001`
   - **Files**: `[MODIFY] src-tauri/src/commands/tests.rs`
   - **Commit**: `test(commands): add failing test for invalid coordinates and unknown instance close`
-  - **Verification**: `cargo test commands::tests::test_boundary_and_error_handling` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test commands::tests::test_boundary_and_error_handling` (FAILED as expected: boundary panic)
 
-- [ ] **Task 2.3b: [FEAT] Implement boundary checks and error responses in commands**
+- [x] **Task 2.3b: [FEAT] Implement boundary checks and error responses in commands** (`29fc43c`)
   - **Fulfills**: `REQ-HOST-001`, `REQ-CONFIG-001`
   - **Files**: `[MODIFY] src-tauri/src/commands/mod.rs`
   - **Commit**: `feat(commands): add bounds validation and error handling for window commands`
-  - **Verification**: `cargo test commands::tests::test_boundary_and_error_handling` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test commands::tests::test_boundary_and_error_handling` (PASSED / GREEN in 0.00s)
 
 ---
 
