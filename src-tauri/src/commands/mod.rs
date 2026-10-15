@@ -20,6 +20,12 @@ pub fn save_window_position_logic(
     width: u32,
     height: u32,
 ) -> Result<(), String> {
+    if width < 100 || width > 4000 || height < 100 || height > 4000 {
+        return Err(format!(
+            "invalid window dimensions: width ({}) and height ({}) must be between 100 and 4000",
+            width, height
+        ));
+    }
     let mut guard = store
         .lock()
         .map_err(|e| format!("mutex lock poisoned: {}", e))?;
@@ -46,19 +52,26 @@ pub fn cmd_save_window_position(
 }
 
 pub fn open_widget_logic(
-    _window_mgr: &Mutex<crate::window::WindowManager>,
-    _widget_type: &str,
+    window_mgr: &Mutex<crate::window::WindowManager>,
+    widget_type: &str,
 ) -> Result<String, String> {
-    // Red phase stub: returns Ok unconditionally
-    Ok("todo_mock".to_string())
+    if widget_type != "todo" && widget_type != "countdown" {
+        return Err(format!("unsupported widget type '{}'", widget_type));
+    }
+    let mut guard = window_mgr
+        .lock()
+        .map_err(|e| format!("mutex lock poisoned: {}", e))?;
+    guard.register_instance(widget_type)
 }
 
 pub fn close_widget_logic(
-    _window_mgr: &Mutex<crate::window::WindowManager>,
-    _instance_id: &str,
+    window_mgr: &Mutex<crate::window::WindowManager>,
+    instance_id: &str,
 ) -> Result<(), String> {
-    // Red phase stub: returns Ok unconditionally
-    Ok(())
+    let mut guard = window_mgr
+        .lock()
+        .map_err(|e| format!("mutex lock poisoned: {}", e))?;
+    guard.close_instance(instance_id)
 }
 
 #[tauri::command]
