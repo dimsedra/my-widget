@@ -44,3 +44,36 @@ pub fn cmd_save_window_position(
 ) -> Result<(), String> {
     save_window_position_logic(&store, &instance_id, x, y, width, height)
 }
+
+pub fn open_widget_logic(
+    _window_mgr: &Mutex<crate::window::WindowManager>,
+    _widget_type: &str,
+) -> Result<String, String> {
+    // Red phase stub: returns Ok unconditionally
+    Ok("todo_mock".to_string())
+}
+
+pub fn close_widget_logic(
+    _window_mgr: &Mutex<crate::window::WindowManager>,
+    _instance_id: &str,
+) -> Result<(), String> {
+    // Red phase stub: returns Ok unconditionally
+    Ok(())
+}
+
+#[tauri::command]
+pub fn cmd_open_widget(
+    widget_type: String,
+    window_mgr: tauri::State<'_, Mutex<crate::window::WindowManager>>,
+) -> Result<String, String> {
+    open_widget_logic(&window_mgr, &widget_type)
+}
+
+#[tauri::command]
+pub fn cmd_close_widget(
+    instance_id: String,
+    window_mgr: tauri::State<'_, Mutex<crate::window::WindowManager>>,
+) -> Result<(), String> {
+    close_widget_logic(&window_mgr, &instance_id)
+}
+
