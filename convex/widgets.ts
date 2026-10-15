@@ -14,6 +14,21 @@ export const get = query({
   },
 });
 
+// Queries widgets of a specific type bounded by limit (prevents unbounded memory scan)
+export const listByType = query({
+  args: {
+    widgetType: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const bound = args.limit ?? 50;
+    return await ctx.db
+      .query("widget_data")
+      .withIndex("by_type", (q) => q.eq("widgetType", args.widgetType))
+      .take(bound);
+  },
+});
+
 // Upserts widget data: patches existing row in-place or inserts new record
 export const updatePayload = mutation({
   args: {
