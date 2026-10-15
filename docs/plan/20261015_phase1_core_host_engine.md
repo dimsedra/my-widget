@@ -3,15 +3,15 @@ title: Implementation Plan - Core Host Platform Engine
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: in_progress
+status: completed
 total_tasks: 28
-completed_tasks: 23
+completed_tasks: 28
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[█████████████░░░]` **23 / 28 Tasks Completed (82%)**
+> **Progress Tracker:** `[████████████████]` **28 / 28 Tasks Completed (100%)**
 
 ---
 
@@ -242,17 +242,17 @@ Mengaktifkan `"skipTaskbar": true` pada konfigurasi jendela Tauri dan menyambung
 
 ### Scenario 5.4: Native WebviewWindow Spawning in WindowManager (Normal Path / ADR-003)
 Memperluas `WindowManager` agar dapat berinteraksi dengan `AppHandle` untuk memanggil `WebviewWindowBuilder`, sehingga pembuatan widget baru benar-benar menghasilkan jendela OS fisik yang transparan, tanpa dekorasi, dan terisolasi.
-- [ ] **Task 5.4a: [TEST] Write failing test for native window creation contract in WindowManager**
+- [x] **Task 5.4a: [TEST] Write failing test for native window creation contract in WindowManager** (`671d4b6`)
   - **Fulfills**: `REQ-HOST-001`, `ADR-003`
   - **Files**: `[MODIFY] src-tauri/src/window/tests.rs`
   - **Commit**: `test(window): add failing test for native WebviewWindow spawning logic`
-  - **Verification**: `cargo test window::tests::test_native_window_spawning` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test window::tests::test_native_window_spawning` (FAILED as expected: get_launch_params not found)
 
-- [ ] **Task 5.4b: [FEAT] Implement WebviewWindowBuilder spawning in WindowManager**
+- [x] **Task 5.4b: [FEAT] Implement WebviewWindowBuilder spawning in WindowManager** (`2c5202a`)
   - **Fulfills**: `REQ-HOST-001`, `ADR-003`
   - **Files**: `[MODIFY] src-tauri/src/window/mod.rs`
   - **Commit**: `feat(window): implement native window spawning with transparent frameless styles`
-  - **Verification**: `cargo test window::tests::test_native_window_spawning` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test window::tests::test_native_window_spawning` (PASSED / GREEN in 0.00s)
 
 ---
 
