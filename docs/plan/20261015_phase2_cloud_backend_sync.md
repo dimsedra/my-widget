@@ -3,15 +3,15 @@ title: Implementation Plan - Phase 2 Cloud Backend & Sync Pipeline
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: in_progress
+status: completed
 total_tasks: 18
-completed_tasks: 16
+completed_tasks: 18
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[██████████████░░]` **16 / 18 Tasks Completed (89%)**
+> **Progress Tracker:** `[████████████████]` **18 / 18 Tasks Completed (100%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -140,14 +140,14 @@ Fokus fase ini adalah menghubungkan frontend React ke provider Convex serta meny
   - **Verification**: `pnpm test src/providers/ConvexClientProvider.test.tsx` (PASSED / GREEN)
 
 ### Scenario 3.2: useWidgetSync Custom Hook with Offline Resilience (Boundary & Error Resilience)
-- [ ] **Task 3.2a: [TEST] Add failing test asserting useWidgetSync handles loading, data return, and mutation invocation**
+- [x] **Task 3.2a: [TEST] Add failing test asserting useWidgetSync handles loading, data return, and mutation invocation** (`8939c81`)
   - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
   - **Files**: `[NEW] src/hooks/useWidgetSync.test.tsx`
   - **Commit**: `test(client): assert useWidgetSync hook lifecycle and mutation calls`
-  - **Verification**: `pnpm test src/hooks/useWidgetSync.test.tsx` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test src/hooks/useWidgetSync.test.tsx` (FAILED as expected)
 
-- [ ] **Task 3.2b: [FEAT] Implement useWidgetSync hook wrapping useQuery and useMutation**
+- [x] **Task 3.2b: [FEAT] Implement useWidgetSync hook wrapping useQuery and useMutation** (`b81f24a`)
   - **Fulfills**: `REQ-SYNC-001`, `NFR-REL-001`
   - **Files**: `[NEW] src/hooks/useWidgetSync.ts`
   - **Commit**: `feat(client): implement useWidgetSync hook with reactive query and mutation`
-  - **Verification**: `pnpm test src/hooks/useWidgetSync.test.tsx` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test src/hooks/useWidgetSync.test.tsx` (PASSED / GREEN)
