@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 14
-completed_tasks: 4
+completed_tasks: 6
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[████░░░░░░░░░░░░]` **4 / 14 Tasks Completed (29%)**
+> **Progress Tracker:** `[█████░░░░░░░░░░░]` **6 / 14 Tasks Completed (43%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -56,24 +56,24 @@ Fokus fase ini adalah menyiapkan infrastruktur pengujian otomatis backend di mem
 Fokus fase ini adalah membangun fungsi server Convex untuk kueri data reaktif dan mutasi data polimorfik *(upsert)* dengan perlindungan data multi-instance dan batasan pembacaan terukur.
 
 ### Scenario 2.1: Initial Widget Data Upsert via updatePayload (Normal Path - Creation)
-- [ ] **Task 2.1a: [TEST] Add failing test asserting new widget record creation via updatePayload**
+- [x] **Task 2.1a: [TEST] Add failing test asserting new widget record creation via updatePayload** (`9832ca0`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[NEW] convex/widgets.test.ts`
   - **Commit**: `test(widgets): assert initial widget creation via updatePayload`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (FAILED as expected)
 
-- [ ] **Task 2.1b: [FEAT] Implement get query and updatePayload mutation insert branch**
+- [x] **Task 2.1b: [FEAT] Implement get query and updatePayload mutation insert branch** (`0bb7b6a`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[NEW] convex/widgets.ts`
   - **Commit**: `feat(widgets): implement get query and updatePayload creation logic`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.2: Existing Widget Data Update without Row Duplication (Normal Path - Mutation)
 - [ ] **Task 2.2a: [TEST] Add failing test asserting updatePayload modifies existing row without duplication**
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/widgets.test.ts`
   - **Commit**: `test(widgets): assert updatePayload patches existing row without duplication`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: FAIL / RED)
 
 - [ ] **Task 2.2b: [FEAT] Implement patch branch in updatePayload mutation**
   - **Fulfills**: `REQ-SYNC-001`
