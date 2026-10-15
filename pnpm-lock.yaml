@@ -54,6 +54,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.1.2(vite@8.3.4(@types/node@26.6.5)(esbuild@0.27.0)(jiti@2.7.0))
+      convex-test:
+        specifier: ^0.0.62
+        version: 0.0.62(convex@1.46.0(react@19.3.1))
       jsdom:
         specifier: ^30.1.3
         version: 30.1.3
@@ -712,6 +715,11 @@ packages:
   chai@6.3.0:
     resolution: {integrity: sha512-XWAtwJ6OHO+tj0EKCs0Y2UamnyOxseZWltU4x2U2wh8g4AigdjwvtUjvLP2tqkA/avxHEtzxNaqGq/YGNwckKg==}
     engines: {node: '>=18'}
+
+  convex-test@0.0.62:
+    resolution: {integrity: sha512-gvFps/A1JhOlFToZKjStSX8lWQS8oPF4oKm6U5D/ZdmOtfC7bKqw5Ce5ccAf45jvxPKPcFiyWt8JrueE+byB2g==}
+    peerDependencies:
+      convex: ^1.43.0
 
   convex@1.46.0:
     resolution: {integrity: sha512-dhBwDQTZDOhi5SUGAX17EWNehCdNq6/UFrSL0eLZuGfMkdsQbCVWVRZCzbZ5CF+/pgvoGxtApbEoTSipqL4JTw==}
@@ -1681,6 +1689,10 @@ snapshots:
       require-from-string: 2.0.2
 
   chai@6.3.0: {}
+
+  convex-test@0.0.62(convex@1.46.0(react@19.3.1)):
+    dependencies:
+      convex: 1.46.0(react@19.3.1)
 
   convex@1.46.0(react@19.3.1):
     dependencies:
