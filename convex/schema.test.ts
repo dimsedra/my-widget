@@ -9,6 +9,14 @@ describe("Convex Schema: widget_data", () => {
     expect(schema.tables).toBeDefined();
     expect(schema.tables.widget_data).toBeDefined();
 
+    const validator = schema.tables.widget_data.validator;
+    expect(validator).toBeDefined();
+    expect(validator.fields.instanceId).toBeDefined();
+    expect(validator.fields.widgetType).toBeDefined();
+    expect(validator.fields.title).toBeDefined();
+    expect(validator.fields.payload).toBeDefined();
+    expect(validator.fields.updatedAt).toBeDefined();
+
     const indexes = schema.tables.widget_data.indexes;
     expect(indexes).toBeDefined();
 
