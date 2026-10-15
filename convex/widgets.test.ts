@@ -144,5 +144,50 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
     for (const item of results) {
       expect(item.widgetType).toBe("todo");
     }
+
+    // Defensive clamping: Negative or 0 limit clamps to minimum 1
+    const clampedResults = await t.query(api.widgets.listByType, {
+      widgetType: "todo",
+      limit: -5,
+    });
+    expect(clampedResults).toHaveLength(1);
+  });
+
+  it("should reject empty or whitespace instanceId with descriptive error", async () => {
+    const t = convexTest(schema, modules);
+
+    await expect(
+      t.mutation(api.widgets.updatePayload, {
+        instanceId: "   ",
+        widgetType: "todo",
+        title: "Invalid Widget",
+        payload: {},
+      })
+    ).rejects.toThrow("instanceId must not be empty");
+
+    // Query with empty instanceId returns null cleanly
+    const result = await t.query(api.widgets.get, { instanceId: "   " });
+    expect(result).toBeNull();
+  });
+
+  it("should update widgetType consistency during in-place patch", async () => {
+    const t = convexTest(schema, modules);
+
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "widget-type-test",
+      widgetType: "todo",
+      title: "Original",
+      payload: {},
+    });
+
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "widget-type-test",
+      widgetType: "todo_v2",
+      title: "Updated",
+      payload: {},
+    });
+
+    const doc = await t.query(api.widgets.get, { instanceId: "widget-type-test" });
+    expect(doc?.widgetType).toBe("todo_v2");
   });
 });
