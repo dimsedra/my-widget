@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 14
-completed_tasks: 10
+completed_tasks: 12
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[███████████░░░░░]` **10 / 14 Tasks Completed (71%)**
+> **Progress Tracker:** `[█████████████░░░]` **12 / 14 Tasks Completed (86%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -95,17 +95,17 @@ Fokus fase ini adalah membangun fungsi server Convex untuk kueri data reaktif da
   - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.4: Non-Existent Instance Handling (Boundary - Empty/Null)
-- [ ] **Task 2.4a: [TEST] Add failing test asserting get returns null cleanly for non-existent instanceId**
+- [x] **Task 2.4a: [TEST] Add failing test asserting get returns null cleanly for non-existent instanceId** (`985ca7a`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/widgets.test.ts`
   - **Commit**: `test(widgets): assert get query returns null for unknown instanceId`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (FAILED as expected)
 
-- [ ] **Task 2.4b: [FEAT] Ensure graceful null return in get query**
+- [x] **Task 2.4b: [FEAT] Ensure graceful null return in get query** (`7f1e928`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/widgets.ts`
   - **Commit**: `feat(widgets): handle null result gracefully for unknown instanceId`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.5: Bounded Query List by Widget Type (Boundary & Scale)
 - [ ] **Task 2.5a: [TEST] Add failing test asserting listByType returns bounded list of instances**
