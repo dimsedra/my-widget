@@ -47,6 +47,23 @@ pub fn run() {
     let builder = configure_builder(tauri::Builder::default(), config_store, window_manager);
 
     builder
+        .setup(|app| {
+            let _ = crate::tray::setup_tray(app.handle());
+
+            #[cfg(target_os = "windows")]
+            {
+                use tauri::Manager;
+                if let Some(window) = app.get_webview_window("main") {
+                    if let Ok(hwnd) = window.hwnd() {
+                        let _ = crate::platform::windows::pin_window_to_desktop(
+                            windows::Win32::Foundation::HWND(hwnd.0 as *mut _),
+                        );
+                    }
+                }
+            }
+
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

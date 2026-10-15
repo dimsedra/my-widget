@@ -106,3 +106,53 @@ pub fn handle_tray_action(
         TrayAction::Quit => Ok(TrayActionResult::QuitRequested),
     }
 }
+
+pub fn setup_tray<R: tauri::Runtime>(
+    app: &tauri::AppHandle<R>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    use tauri::menu::{Menu, MenuItem, Submenu};
+    use tauri::tray::TrayIconBuilder;
+    use tauri::Manager;
+
+    let menu = Menu::new(app)?;
+
+    let add_widget_sub = Submenu::new(app, "Add Widget", true)?;
+    let todo_item = MenuItem::with_id(app, "add_widget_todo", "To-Do", true, None::<&str>)?;
+    let countdown_item =
+        MenuItem::with_id(app, "add_widget_countdown", "Countdown", true, None::<&str>)?;
+    add_widget_sub.append(&todo_item)?;
+    add_widget_sub.append(&countdown_item)?;
+
+    let reset_item =
+        MenuItem::with_id(app, "reset_all_positions", "Reset All Positions", true, None::<&str>)?;
+    let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+
+    menu.append(&add_widget_sub)?;
+    menu.append(&reset_item)?;
+    menu.append(&quit_item)?;
+
+    let _tray = TrayIconBuilder::with_id("main_tray")
+        .menu(&menu)
+        .show_menu_on_left_click(true)
+        .on_menu_event(|app, event| {
+            let id = event.id.as_ref();
+            if let Some(action) = parse_tray_menu_id(id) {
+                if action == TrayAction::Quit {
+                    app.exit(0);
+                    return;
+                }
+                if let (Some(wm_state), Some(cs_state)) = (
+                    app.try_state::<std::sync::Mutex<WindowManager>>(),
+                    app.try_state::<std::sync::Mutex<ConfigStore>>(),
+                ) {
+                    if let (Ok(mut wm), Ok(mut cs)) = (wm_state.lock(), cs_state.lock()) {
+                        let _ = handle_tray_action(action, &mut wm, &mut cs);
+                    }
+                }
+            }
+        })
+        .build(app)?;
+
+    Ok(())
+}
+
