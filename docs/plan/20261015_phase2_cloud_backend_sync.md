@@ -4,14 +4,14 @@ type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
-total_tasks: 14
-completed_tasks: 12
+total_tasks: 18
+completed_tasks: 14
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[█████████████░░░]` **12 / 14 Tasks Completed (86%)**
+> **Progress Tracker:** `[████████████░░░░]` **14 / 18 Tasks Completed (78%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -108,17 +108,17 @@ Fokus fase ini adalah membangun fungsi server Convex untuk kueri data reaktif da
   - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ### Scenario 2.5: Bounded Query List by Widget Type (Boundary & Scale)
-- [ ] **Task 2.5a: [TEST] Add failing test asserting listByType returns bounded list of instances**
+- [x] **Task 2.5a: [TEST] Add failing test asserting listByType returns bounded list of instances** (`1738a68`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/widgets.test.ts`
   - **Commit**: `test(widgets): assert listByType returns bounded results`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (FAILED as expected)
 
-- [ ] **Task 2.5b: [FEAT] Implement bounded listByType query using take()**
+- [x] **Task 2.5b: [FEAT] Implement bounded listByType query using take()** (`d332780`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] convex/widgets.ts`
   - **Commit**: `feat(widgets): implement bounded listByType query`
-  - **Verification**: `pnpm test convex/widgets.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/widgets.test.ts` (PASSED / GREEN)
 
 ---
 
