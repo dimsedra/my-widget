@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 12
+completed_tasks: 14
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[█████████░░░░░░░]` **12 / 20 Tasks Completed (60%)**
+> **Progress Tracker:** `[███████████░░░░░]` **14 / 20 Tasks Completed (70%)**
 
 ---
 
@@ -132,17 +132,17 @@ Mengintegrasikan interop Win32 API untuk penempelan ke lapisan wallpaper desktop
 
 ### Scenario 3.1: Win32 Desktop Pinning and Extended Styles (Normal Path / Core Invariant)
 Memastikan setiap jendela yang dibuat menerima atribut `WS_EX_TOOLWINDOW` dan ditempatkan pada lapisan Z-Order paling dasar (`HWND_BOTTOM`) melalui Win32 `SetWindowPos`.
-- [ ] **Task 3.1a: [TEST] Write failing integration test verifying Win32 styles and pinning flags**
+- [x] **Task 3.1a: [TEST] Write failing integration test verifying Win32 styles and pinning flags** (`94c2610`)
   - **Fulfills**: `REQ-HOST-001`
   - **Files**: `[NEW] src-tauri/src/platform/windows/tests.rs`
   - **Commit**: `test(platform): add failing test for Win32 desktop pinning and extended styles`
-  - **Verification**: `cargo test platform::windows::tests::test_desktop_pinning_flags` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test platform::windows::tests::test_desktop_pinning_flags` (FAILED as expected: style mismatch)
 
-- [ ] **Task 3.1b: [FEAT] Implement Win32 pin_to_desktop via windows-rs**
+- [x] **Task 3.1b: [FEAT] Implement Win32 pin_to_desktop via windows-rs** (`bab1c23`)
   - **Fulfills**: `REQ-HOST-001`
   - **Files**: `[NEW] src-tauri/src/platform/windows/mod.rs`, `[MODIFY] src-tauri/Cargo.toml`
   - **Commit**: `feat(platform): implement Win32 HWND_BOTTOM pinning and toolwindow style`
-  - **Verification**: `cargo test platform::windows::tests::test_desktop_pinning_flags` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test platform::windows::tests::test_desktop_pinning_flags` (PASSED / GREEN in 0.00s)
 
 ### Scenario 3.2: System Tray Registration and Event Handling (Normal Path)
 Memastikan ikon System Tray terdaftar pada area notifikasi Windows dan menangani aksi klik menu ("Add Widget", "Reset All Positions", "Quit") dengan benar.
