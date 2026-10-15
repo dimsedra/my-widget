@@ -27,3 +27,32 @@ fn test_default_config_when_missing() {
     // Should also write the default config to disk
     assert!(config_path.exists());
 }
+
+#[test]
+fn test_save_window_position_atomic() {
+    let temp_dir = tempdir().expect("failed to create temp dir");
+    let config_path = temp_dir.path().join("config.json");
+
+    let mut store = ConfigStore::new(config_path.clone());
+    let _ = store.load().expect("should initialize default");
+
+    // Mutate position of todo_default
+    store
+        .save_position("todo_default", 250, 300, 350, 500)
+        .expect("saving position should succeed");
+
+    // Read back config from disk using a fresh store instance to verify persistence
+    let mut fresh_store = ConfigStore::new(config_path.clone());
+    let reloaded = fresh_store.load().expect("reload should succeed");
+
+    let todo = reloaded.instances.get("todo_default").unwrap();
+    assert_eq!(todo.x, 250);
+    assert_eq!(todo.y, 300);
+    assert_eq!(todo.width, 350);
+    assert_eq!(todo.height, 500);
+
+    // Invariant: temporary swap file must not linger on disk
+    let temp_file_path = config_path.with_extension("tmp");
+    assert!(!temp_file_path.exists(), "temporary swap file must not remain on disk");
+}
+

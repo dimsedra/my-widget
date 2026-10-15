@@ -37,4 +37,16 @@ impl ConfigStore {
 
         Ok(config)
     }
+
+    pub fn save_position(
+        &mut self,
+        _instance_id: &str,
+        _x: i32,
+        _y: i32,
+        _width: u32,
+        _height: u32,
+    ) -> Result<(), String> {
+        // Red phase stub: intentionally not implemented
+        Err("not implemented: atomic save window position".to_string())
+    }
 }
