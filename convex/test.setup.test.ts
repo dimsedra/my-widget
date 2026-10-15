@@ -8,4 +8,10 @@ describe("Convex In-Memory Test Runner", () => {
     // In-memory test environment must instantiate cleanly
     expect(typeof convexTest).toBe("function");
   });
+
+  it("should have convex typecheck script configured in package.json and wired to build", async () => {
+    const pkg = await import("../package.json");
+    expect(pkg.scripts["typecheck:convex"]).toBe("tsc --project convex/tsconfig.json --noEmit");
+    expect(pkg.scripts["build"]).toContain("typecheck:convex");
+  });
 });
