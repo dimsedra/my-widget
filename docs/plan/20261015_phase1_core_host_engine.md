@@ -194,16 +194,38 @@ Memverifikasi bahwa jendela shell merender latar belakang transparan dengan efek
 
 ---
 
-## 2. Dependencies & Execution Sequence
+---
 
-```mermaid
-flowchart TD
-    P1["Phase 1: Config Store & Persistence (Rust)"] --> P2["Phase 2: Tauri IPC & Multi-Window Manager (Rust)"]
-    P2 --> P3["Phase 3: Win32 Pinning & System Tray (Rust + Windows API)"]
-    P3 --> P4["Phase 4: Base WidgetShell & Drag Region (React + Tailwind)"]
-```
+## 2. Toolchain, Runtime Environment & Dependency Specifications
 
-1. **Rust Toolchain**: `stable-x86_64-pc-windows-msvc`.
-2. **Node.js Environment**: Node v20+ dengan `pnpm`.
-3. **Crates**: `tauri` (v2), `serde`, `serde_json`, `windows` (Win32 interop), `tempfile`.
-4. **Frontend Packages**: `react`, `react-dom`, `@tauri-apps/api`, `tailwindcss`, `vite`, `@testing-library/react`, `vitest`, `@playwright/test`.
+### 2.1 Runtime Environment Decision: Native Windows Host vs Docker
+- **Keputusan**: Berjalan langsung secara native pada mesin host Windows (`stable-x86_64-pc-windows-msvc`), **tidak menggunakan Docker**.
+- **Alasan Teknis & Logika Sistem**:
+  1. **Akses Win32 & Desktop Shell**: Aplikasi ini membutuhkan interaksi langsung dengan Desktop Window Manager (DWM) dan window hierarchy Windows (`WorkerW` / `HWND_BOTTOM`), penyematan gaya extended (`WS_EX_TOOLWINDOW`), dan integrasi System Tray di taskbar. Container Docker (baik Linux via WSL2 maupun Windows Server container) tidak memiliki sesi grafis interaktif pengguna (*interactive desktop session 1*) untuk merender jendela ke desktop host.
+  2. **Microsoft Edge WebView2**: Jendela antarmuka widget bergantung pada runtime WebView2 native yang sudah terpasang di sistem operasi Windows pengguna.
+  3. **Kesiapan Toolchain Lokal**: Mesin lokal pengguna sudah terpasang perkakas modern dan lengkap (`rustc 1.96.0`, `cargo 1.96.0`, Node.js `v25.2.1`, dan `pnpm 10.33.0`), sehingga kompilasi native berjalan instan tanpa overhead virtualisasi.
+
+### 2.2 Explicit Latest Stable Version Matrix
+
+Seluruh scaffolding dan instalasi paket pada Phase 1 wajib mengacu pada tag versi stabil terbaru (*latest stable release*) berikut:
+
+#### Backend Rust Engine (`src-tauri/Cargo.toml`)
+- **`tauri`**: `2.12.4` (Versi stabil tertinggi lini Tauri v2; menghindari versi v3 yang masih dalam status alpha).
+- **`tauri-build`**: `2.7.3` (Build script helper resmi untuk Tauri v2).
+- **`windows`**: `0.62.2` (Crate resmi Microsoft `windows-rs` dengan fitur: `Win32_UI_WindowsAndMessaging`, `Win32_Foundation`).
+- **`serde`**: `1.0.229` (dengan fitur `derive` untuk serialisasi data JSON).
+- **`serde_json`**: `1.0.154` (Parser JSON untuk konfigurasi lokal).
+- **`tempfile`**: `3.27.0` (Pengelolaan berkas temporer untuk operasi penulisan atomik `atomic write`).
+
+#### Frontend Webview Shell (`package.json`)
+- **`@tauri-apps/cli`**: `^2.12.3` (Perkakas CLI resmi Tauri v2).
+- **`@tauri-apps/api`**: `^2.12.4` (Pustaka interop IPC frontend Tauri v2).
+- **`vite`**: `^8.3.4` (Bundler dan dev server).
+- **`react`**: `^19.3.1` (Pustaka rendering komponen antarmuka).
+- **`react-dom`**: `^19.3.1` (DOM renderer untuk React).
+- **`typescript`**: `^7.0.2` (Penegakan tipe data statis).
+- **`tailwindcss`**: `^4.3.3` (Styling antarmuka dan utility frosted glass).
+- **`vitest`**: `^5.0.4` (Unit dan component test runner).
+- **`@testing-library/react`**: `^16.3.3` (DOM testing utilities untuk React).
+- **`@playwright/test`**: `^1.64.1` (Harness verifikasi visual Playwright).
+
