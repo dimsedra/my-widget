@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 
 interface ConvexClientProviderProps {
@@ -10,7 +10,13 @@ export function ConvexClientProvider({ children, url }: ConvexClientProviderProp
   const convexUrl =
     url || import.meta.env.VITE_CONVEX_URL || "https://placeholder.convex.cloud";
 
-  const client = useMemo(() => new ConvexReactClient(convexUrl), [convexUrl]);
+  const [client] = useState(() => new ConvexReactClient(convexUrl));
+
+  useEffect(() => {
+    return () => {
+      void client.close();
+    };
+  }, [client]);
 
   return <ConvexProvider client={client}>{children}</ConvexProvider>;
 }
