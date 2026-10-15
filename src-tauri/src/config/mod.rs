@@ -4,6 +4,7 @@ pub mod models;
 mod tests;
 
 use models::AppConfig;
+use std::fs;
 use std::path::PathBuf;
 
 pub struct ConfigStore {
@@ -16,7 +17,24 @@ impl ConfigStore {
     }
 
     pub fn load(&mut self) -> Result<AppConfig, String> {
-        // Red phase stub: intentionally not implemented
-        Err("not implemented: default config creation when file is missing".to_string())
+        if !self.config_path.exists() {
+            let default_config = AppConfig::default();
+            if let Some(parent) = self.config_path.parent() {
+                fs::create_dir_all(parent)
+                    .map_err(|e| format!("failed to create config directory: {}", e))?;
+            }
+            let serialized = serde_json::to_string_pretty(&default_config)
+                .map_err(|e| format!("failed to serialize default config: {}", e))?;
+            fs::write(&self.config_path, serialized)
+                .map_err(|e| format!("failed to write default config file: {}", e))?;
+            return Ok(default_config);
+        }
+
+        let content = fs::read_to_string(&self.config_path)
+            .map_err(|e| format!("failed to read config file: {}", e))?;
+        let config: AppConfig = serde_json::from_str(&content)
+            .map_err(|e| format!("failed to parse config json: {}", e))?;
+
+        Ok(config)
     }
 }
