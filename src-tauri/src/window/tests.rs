@@ -36,3 +36,33 @@ fn test_window_manager_instance_tracking() {
     assert_eq!(manager.open_instances().len(), 1);
     assert!(manager.is_open(&countdown_id));
 }
+
+#[test]
+fn test_native_window_spawning() {
+    let manager = WindowManager::new();
+
+    let todo_params = manager
+        .get_launch_params("todo", "todo_test_1")
+        .expect("should return launch params for todo");
+    assert_eq!(todo_params.label, "todo_test_1");
+    assert_eq!(todo_params.widget_type, "todo");
+    assert_eq!(todo_params.width, 320.0);
+    assert_eq!(todo_params.height, 450.0);
+    assert!(!todo_params.decorations, "window must be frameless");
+    assert!(todo_params.transparent, "window must be transparent");
+    assert!(todo_params.skip_taskbar, "window must skip taskbar");
+
+    let countdown_params = manager
+        .get_launch_params("countdown", "countdown_test_1")
+        .expect("should return launch params for countdown");
+    assert_eq!(countdown_params.label, "countdown_test_1");
+    assert_eq!(countdown_params.width, 280.0);
+    assert_eq!(countdown_params.height, 200.0);
+    assert!(!countdown_params.decorations);
+    assert!(countdown_params.transparent);
+    assert!(countdown_params.skip_taskbar);
+
+    let err_params = manager.get_launch_params("unsupported_type", "invalid_1");
+    assert!(err_params.is_err());
+}
+
