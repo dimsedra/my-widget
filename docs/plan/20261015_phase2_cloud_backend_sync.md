@@ -3,15 +3,15 @@ title: Implementation Plan - Phase 2 Cloud Backend & Sync Pipeline
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: planned
+status: in_progress
 total_tasks: 14
-completed_tasks: 0
+completed_tasks: 4
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Phase 2 - Cloud Backend & Sync Pipeline
 
-> **Progress Tracker:** `[░░░░░░░░░░░░░░░░]` **0 / 14 Tasks Completed (0%)**
+> **Progress Tracker:** `[████░░░░░░░░░░░░]` **4 / 14 Tasks Completed (29%)**
 
 Dokumen rencana kerja ini mendefinisikan langkah implementasi bertahap *(commit-driven TDD roadmap)* untuk membangun pipa backend cloud dan sinkronisasi data reaktif dua arah *(real-time reactivity)* berbasis Convex BaaS sesuai spesifikasi kebutuhan pada `REQ-SYNC-001`, `NFR-REL-001`, serta keputusan arsitektur `ADR-002` dan `ADR-004`.
 
@@ -24,30 +24,30 @@ Setiap skenario perilaku disusun dengan pendekatan dual-task TDD (Task a: Test [
 Fokus fase ini adalah menyiapkan infrastruktur pengujian otomatis backend di memori via `convex-test` dan mendefinisikan skema tabel polimorfik generik `widget_data`.
 
 ### Scenario 1.1: Backend Test Runner Setup (Normal Path / Infra)
-- [ ] **Task 1.1a: [TEST] Add failing test asserting convex-test runner configuration**
+- [x] **Task 1.1a: [TEST] Add failing test asserting convex-test runner configuration** (`a46be22`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[NEW] convex/test.setup.test.ts`
   - **Commit**: `test(convex): verify convex-test test runner setup`
-  - **Verification**: `pnpm test convex/test.setup.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/test.setup.test.ts` (FAILED as expected)
 
-- [ ] **Task 1.1b: [FEAT] Install convex-test and configure Vitest inclusion for convex**
+- [x] **Task 1.1b: [FEAT] Install convex-test and configure Vitest inclusion for convex** (`6cbc9ec`)
   - **Fulfills**: `REQ-SYNC-001`
   - **Files**: `[MODIFY] package.json`, `[MODIFY] vite.config.ts`, `[MODIFY] convex/test.setup.test.ts`
   - **Commit**: `feat(convex): install convex-test and configure vitest runner`
-  - **Verification**: `pnpm test convex/test.setup.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/test.setup.test.ts` (PASSED / GREEN)
 
 ### Scenario 1.2: Generic Polymorphic Schema Definition (Core Invariant)
-- [ ] **Task 1.2a: [TEST] Add failing test asserting widget_data table schema and indexes**
+- [x] **Task 1.2a: [TEST] Add failing test asserting widget_data table schema and indexes** (`039c6aa`)
   - **Fulfills**: `REQ-SYNC-001`, `ADR-004`
   - **Files**: `[NEW] convex/schema.test.ts`
   - **Commit**: `test(schema): assert widget_data schema and indexes definition`
-  - **Verification**: `pnpm test convex/schema.test.ts` (EXPECTED: FAIL / RED)
+  - **Verification**: `pnpm test convex/schema.test.ts` (FAILED as expected)
 
-- [ ] **Task 1.2b: [FEAT] Implement generic polymorphic schema in convex/schema.ts**
+- [x] **Task 1.2b: [FEAT] Implement generic polymorphic schema in convex/schema.ts** (`438384d`)
   - **Fulfills**: `REQ-SYNC-001`, `ADR-004`
   - **Files**: `[NEW] convex/schema.ts`
   - **Commit**: `feat(schema): implement generic widget_data schema with indexes`
-  - **Verification**: `pnpm test convex/schema.test.ts` (EXPECTED: PASS / GREEN)
+  - **Verification**: `pnpm test convex/schema.test.ts` (PASSED / GREEN)
 
 ---
 
