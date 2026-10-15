@@ -2,8 +2,8 @@
 title: Desktop Widget Platform Technical Specification
 type: srs
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
-status: Waiting for Review
-last_updated: 2026-10-13
+status: Approved
+last_updated: 2026-10-15
 ---
 
 # Software Requirements Specification: Desktop Widget Platform
@@ -12,8 +12,8 @@ last_updated: 2026-10-13
 
 - **Document ID**: `SRS-MYWIDGET-001`
 - **Specification Version**: `v1.0.0`
-- **Parent PRD**: [`docs/prd/20261013_desktop_widget_platform.md`](file:///C:/Users/Dimas%20Edra%20Ar%20Rafi/ProjectHub/my-widget/docs/prd/20261013_desktop_widget_platform.md)
-- **Status**: Waiting for Review
+- **Parent PRD**: [`docs/prd/20261013_desktop_widget_platform.md`](file:///D:/Project%20Hub/my-widget/docs/prd/20261013_desktop_widget_platform.md)
+- **Status**: Approved
 - **Author**: Antigravity & Eds (System Engineering)
 - **Traceability Baseline**: Memetakan seluruh kebutuhan fungsional dari PRD menjadi kontrak teknis yang dapat diuji secara otomatis *(automated test verification)*.
 
@@ -299,3 +299,34 @@ export default defineSchema({
 - **Tauri CLI**: `v2.x`.
 - **Convex Client**: `convex@1.x`.
 - **Windows SDK**: Termasuk header C++ / Win32 untuk kompilasi `windows-rs`.
+
+---
+
+## Section 8: Implementation Roadmaps & Plan Decomposition
+
+Untuk menjaga proses pengembangan tetap terukur, modular, dan dapat diuji secara bertahap *(bite-sized increments)*, spesifikasi teknis pada dokumen SRS ini dipecah menjadi 4 dokumen rencana kerja implementasi mandiri di dalam direktori `docs/plan/`:
+
+### 8.1 Plan 1: Core Host Platform Engine (`phase1_core_host_engine.md`)
+- **Ruang Lingkup Modul**: Module 1 (HOST) dan Module 2 (CONFIG).
+- **Kebutuhan Terkait**: `REQ-HOST-001`, `REQ-HOST-002`, `REQ-HOST-003`, `REQ-CONFIG-001`.
+- **Fokus Eksekusi**: Inisialisasi scaffolding Tauri v2 dengan Rust, manipulasi Win32 API (`HWND_BOTTOM`, `skip_taskbar`, `WS_EX_TOOLWINDOW`), registrasi System Tray Windows, dan persistensi koordinat lokal ke `%APPDATA%/my-widget/config.json`.
+- **Kriteria Verifikasi**: Jendela frameless transparan menempel di desktop Windows, bebas digeser via drag handle, posisi tersimpan saat ditutup, dan tidak muncul di taskbar maupun `Alt + Tab`.
+
+### 8.2 Plan 2: Cloud Backend & Sync Pipeline (`phase2_cloud_backend_sync.md`)
+- **Ruang Lingkup Modul**: Module 3 (SYNC).
+- **Kebutuhan Terkait**: `REQ-SYNC-001`.
+- **Fokus Eksekusi**: Inisialisasi Convex BaaS, pendefinisian tabel generik `widget_data` (`instanceId`, `widgetType`, `title`, `payload: any`), fungsi server kueri dan mutasi data polimorfik, serta penulisan automated contract tests via `convex-test`.
+- **Kriteria Verifikasi**: Kueri dan mutasi data reaktif berhasil tersinkronisasi dua arah via WebSocket dengan latensi di bawah 500ms dan lolos uji kontrak Convex.
+
+### 8.3 Plan 3: To-Do Widget & Notification Engine (`phase3_todo_widget_notification.md`)
+- **Ruang Lingkup Modul**: Module 4 (TODO) dan Module 6 (NOTIF).
+- **Kebutuhan Terkait**: `REQ-TODO-001`, `REQ-TODO-002`, `REQ-NOTIF-001`.
+- **Fokus Eksekusi**: Skema Zod `TodoPayloadSchema`, operasi data checklist tugas (CRUD), background interval timer pemantau batas waktu tugas di sisi klien, dan jembatan perintah IPC Rust untuk memicu Windows native toast notification.
+- **Kriteria Verifikasi**: Tugas dapat ditambah, dicentang, dan dihapus secara reaktif; banner toast native Windows muncul tepat waktu saat deadline tiba; unit test Zod dan status mutasi lolos 100%.
+
+### 8.4 Plan 4: Countdown Widget & System Polish (`phase4_countdown_widget_polish.md`)
+- **Ruang Lingkup Modul**: Module 5 (COUNTDOWN) dan Non-Functional Requirements (NFR).
+- **Kebutuhan Terkait**: `REQ-COUNTDOWN-001`, `NFR-PERF-001`, `NFR-PERF-002`, `NFR-REL-001`, `NFR-REL-002`.
+- **Fokus Eksekusi**: Skema Zod `CountdownPayloadSchema`, kalkulasi akurat selisih hari/jam, antarmuka formulir pengaturan target tanggal via klik kanan, audit visual konsistensi tampilan frosted glass, serta benchmarking konsumsi sumber daya (RAM < 90 MB dan 0% CPU idle).
+- **Kriteria Verifikasi**: Widget countdown menghitung sisa hari secara presisi; pengaturan tanggal tersimpan ke cloud; aplikasi tetap stabil saat offline; total footprint memori memenuhi batas NFR.
+

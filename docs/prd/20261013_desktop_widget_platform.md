@@ -1,8 +1,8 @@
 ---
 title: Desktop Widget Platform
 type: prd
-status: Waiting for Review
-last_updated: 2026-10-13
+status: Approved
+last_updated: 2026-10-15
 ---
 
 # Product Requirements Document: Desktop Widget Platform
@@ -11,7 +11,7 @@ last_updated: 2026-10-13
 
 - **Project Name**: Desktop Widget Platform (`my-widget`)
 - **Document Type**: Product Requirements Document (PRD)
-- **Status**: Waiting for Review
+- **Status**: Approved
 - **Lead / Owner**: Eds (Product & Engineering Owner)
 - **Target OS**: Windows 10 / Windows 11 (64-bit)
 - **Initial Target Widgets**: To-Do List (dengan notifikasi batas waktu) dan Days-To-Go Countdown
