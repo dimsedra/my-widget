@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 6
+completed_tasks: 8
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[█████░░░░░░░░░░░]` **6 / 20 Tasks Completed (30%)**
+> **Progress Tracker:** `[██████░░░░░░░░░░]` **8 / 20 Tasks Completed (40%)**
 
 ---
 
@@ -84,17 +84,17 @@ Membangun jembatan komunikasi inter-proses (IPC) antara frontend dan backend Rus
 
 ### Scenario 2.1: IPC Commands for Config Query and Save (Normal Path)
 Memverifikasi fungsi `cmd_load_window_config` dan `cmd_save_window_position` dapat dipanggil dari frontend dan mengembalikan payload yang benar sesuai kontrak SRS Section 3.2.
-- [ ] **Task 2.1a: [TEST] Write failing test for config IPC command handlers**
+- [x] **Task 2.1a: [TEST] Write failing test for config IPC command handlers** (`12d6592`)
   - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
   - **Files**: `[NEW] src-tauri/src/commands/tests.rs`
   - **Commit**: `test(commands): add failing test for load and save config IPC handlers`
-  - **Verification**: `cargo test commands::tests::test_config_ipc_commands` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test commands::tests::test_config_ipc_commands` (FAILED as expected: "not implemented")
 
-- [ ] **Task 2.1b: [FEAT] Implement cmd_load_window_config and cmd_save_window_position**
+- [x] **Task 2.1b: [FEAT] Implement cmd_load_window_config and cmd_save_window_position** (`6a34841`)
   - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
   - **Files**: `[NEW] src-tauri/src/commands/mod.rs`
   - **Commit**: `feat(commands): implement load and save config IPC handlers`
-  - **Verification**: `cargo test commands::tests::test_config_ipc_commands` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test commands::tests::test_config_ipc_commands` (PASSED / GREEN in 0.01s)
 
 ### Scenario 2.2: Window Manager Spawn and Instance Tracking (Normal Path / Boundary)
 Memverifikasi pengendali jendela dapat meluncurkan jendela WebView2 baru dengan `instance_id` unik dan mencatat daftarnya di state aplikasi.
