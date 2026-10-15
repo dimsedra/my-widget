@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 
-// Retrieves single widget instance state with strict index-based data isolation
+// Retrieves single widget instance state with strict index-based data isolation (returns null if not found)
 export const get = query({
   args: {
     instanceId: v.string(),
