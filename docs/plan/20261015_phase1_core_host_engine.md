@@ -3,15 +3,15 @@ title: Implementation Plan - Core Host Platform Engine
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: planned
+status: in_progress
 total_tasks: 20
-completed_tasks: 0
+completed_tasks: 2
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[░░░░░░░░░░░░░░░░]` **0 / 20 Tasks Completed (0%)**
+> **Progress Tracker:** `[██░░░░░░░░░░░░░░]` **2 / 20 Tasks Completed (10%)**
 
 ---
 
@@ -36,17 +36,17 @@ Mengimplementasikan modul pembacaan, penulisan atomik, dan toleransi korupsi ber
 
 ### Scenario 1.1: Default Config Initialization when Config File is Missing (Normal Path / Boundary)
 Memastikan sistem membuat konfigurasi default yang valid ketika aplikasi pertama kali dijalankan dan berkas konfigurasi lokal belum ada di direktori pengguna.
-- [ ] **Task 1.1a: [TEST] Write failing test for initializing default config when file is missing**
+- [x] **Task 1.1a: [TEST] Write failing test for initializing default config when file is missing** (`337669f`)
   - **Fulfills**: `REQ-CONFIG-001`
   - **Files**: `[NEW] src-tauri/src/config/tests.rs`
   - **Commit**: `test(config): add failing test for default config initialization when file missing`
-  - **Verification**: `cargo test config::tests::test_default_config_when_missing` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test config::tests::test_default_config_when_missing` (FAILED as expected: "not implemented")
 
-- [ ] **Task 1.1b: [FEAT] Implement ConfigStore and default instance creation**
+- [x] **Task 1.1b: [FEAT] Implement ConfigStore and default instance creation** (`1b90ff4`)
   - **Fulfills**: `REQ-CONFIG-001`
   - **Files**: `[NEW] src-tauri/src/config/mod.rs`, `[NEW] src-tauri/src/config/models.rs`
   - **Commit**: `feat(config): implement ConfigStore with default instance coordinates`
-  - **Verification**: `cargo test config::tests::test_default_config_when_missing` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test config::tests::test_default_config_when_missing` (PASSED / GREEN in 0.00s)
 
 ### Scenario 1.2: Atomic Persistence of Window Coordinates (Core Invariant / Normal Path)
 Memastikan pembaruan posisi jendela (X, Y, Width, Height) disimpan ke disk secara atomik menggunakan penulisan berkas temporer untuk mencegah korupsi data akibat interupsi tiba-tiba.
