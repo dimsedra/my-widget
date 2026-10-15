@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 4
+completed_tasks: 6
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[███░░░░░░░░░░░░░]` **4 / 20 Tasks Completed (20%)**
+> **Progress Tracker:** `[█████░░░░░░░░░░░]` **6 / 20 Tasks Completed (30%)**
 
 ---
 
@@ -64,17 +64,17 @@ Memastikan pembaruan posisi jendela (X, Y, Width, Height) disimpan ke disk secar
 
 ### Scenario 1.3: Corrupt Config Auto-Recovery (Error Path / Core Invariant)
 Memastikan host engine tidak crash jika berkas `config.json` rusak atau terpotong, melainkan membuat cadangan berkas lama (*backup*) dan memuat konfigurasi default yang bersih.
-- [ ] **Task 1.3a: [TEST] Write failing test for malformed config recovery**
+- [x] **Task 1.3a: [TEST] Write failing test for malformed config recovery** (`5958ae1`)
   - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
   - **Files**: `[MODIFY] src-tauri/src/config/tests.rs`
   - **Commit**: `test(config): add failing test for malformed config json recovery`
-  - **Verification**: `cargo test config::tests::test_corrupt_config_auto_recovery` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test config::tests::test_corrupt_config_auto_recovery` (FAILED as expected: parse error)
 
-- [ ] **Task 1.3b: [FEAT] Implement corruption backup and fallback recovery in ConfigStore**
+- [x] **Task 1.3b: [FEAT] Implement corruption backup and fallback recovery in ConfigStore** (`ec5ee82`)
   - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
   - **Files**: `[MODIFY] src-tauri/src/config/mod.rs`
   - **Commit**: `feat(config): implement backup creation and fallback on malformed json`
-  - **Verification**: `cargo test config::tests::test_corrupt_config_auto_recovery` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test config::tests::test_corrupt_config_auto_recovery` (PASSED / GREEN in 0.01s)
 
 ---
 
