@@ -24,7 +24,7 @@ Dokumentasi arsitektur, spesifikasi produk, dan rekayasa perangkat lunak untuk p
 
 | Dokumen | Induk SRS | Status | Progress | Tanggal Pembaruan | Ringkasan Cakupan |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [Phase 1: Core Host Platform Engine](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase1_core_host_engine.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `In Progress` | `71% (20/28)` | 2026-10-15 | Inisialisasi Tauri v2, Win32 desktop pinning, multi-window runner, System Tray, dan persistensi config (Audit Remediation). |
+| [Phase 1: Core Host Platform Engine](file:///D:/Project%20Hub/my-widget/docs/plan/20261015_phase1_core_host_engine.md) | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `In Progress` | `75% (21/28)` | 2026-10-15 | Inisialisasi Tauri v2, Win32 desktop pinning, multi-window runner, System Tray, dan persistensi config (Audit Remediation). |
 | `phase2_cloud_backend_sync.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-15 | Setup Convex BaaS, skema generic payload `widget_data`, kueri/mutasi, dan contract tests. |
 | `phase3_todo_widget_notification.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-15 | Modul UI To-Do, Zod schema, task CRUD, deadline monitor interval, dan Windows native toast bridge. |
 | `phase4_countdown_widget_polish.md` | [SRS](file:///D:/Project%20Hub/my-widget/docs/srs/20261013_desktop_widget_platform.md) | `Planned` | `0%` | 2026-10-15 | Modul UI Countdown, kalkulasi delta waktu, form pengaturan klik kanan, audit visual, dan tolok ukur RAM/CPU. |

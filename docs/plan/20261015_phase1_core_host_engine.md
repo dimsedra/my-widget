@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 28
-completed_tasks: 20
+completed_tasks: 21
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[███████████░░░░░]` **20 / 28 Tasks Completed (71%)**
+> **Progress Tracker:** `[████████████░░░░]` **21 / 28 Tasks Completed (75%)**
 
 ---
 
@@ -200,17 +200,17 @@ Menuntaskan temuan audit kode independen (`/audit`) untuk menutup celah integras
 
 ### Scenario 5.1: Zero Data-Loss Atomic File Persistence & In-Memory Cache (Core Invariant / Optimization)
 Memperbaiki `ConfigStore::save_position` agar tidak menggunakan pola `remove_file` yang rentan kehilangan data saat crash mendadak, melainkan menggunakan `tempfile::NamedTempFile::persist`, serta menyimpan cache `AppConfig` di memori untuk menghindari re-deserialisasi I/O berulang pada setiap event mouse.
-- [ ] **Task 5.1a: [TEST] Write failing test asserting atomic overwrite without file deletion window and cached config mutation**
+- [x] **Task 5.1a: [TEST] Write failing test asserting atomic overwrite without file deletion window and cached config mutation** (`58c587e`)
   - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
   - **Files**: `[MODIFY] src-tauri/src/config/tests.rs`
   - **Commit**: `test(config): add test for zero data loss atomic persistence and memory cache`
-  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (FAILED as expected: methods not found)
 
-- [ ] **Task 5.1b: [FEAT] Implement NamedTempFile::persist and in-memory config caching in ConfigStore**
+- [x] **Task 5.1b: [FEAT] Implement NamedTempFile::persist and in-memory config caching in ConfigStore** (`4d72ec4`)
   - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
   - **Files**: `[MODIFY] src-tauri/src/config/mod.rs`
   - **Commit**: `feat(config): implement atomic persist via NamedTempFile and in-memory caching`
-  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (PASSED / GREEN in 0.00s)
 
 ### Scenario 5.2: Tauri Runtime Managed State & IPC Command Registration (Normal Path / Integration)
 Mendaftarkan state `Mutex<ConfigStore>` dan `Mutex<WindowManager>` ke `tauri::Builder::manage` dan meregistrasikan 4 handler perintah IPC (`cmd_load_window_config`, `cmd_save_window_position`, `cmd_open_widget`, `cmd_close_widget`) pada `invoke_handler` di `src-tauri/src/lib.rs`.
