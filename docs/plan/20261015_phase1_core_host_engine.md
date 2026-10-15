@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 2
+completed_tasks: 4
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[██░░░░░░░░░░░░░░]` **2 / 20 Tasks Completed (10%)**
+> **Progress Tracker:** `[███░░░░░░░░░░░░░]` **4 / 20 Tasks Completed (20%)**
 
 ---
 
@@ -50,17 +50,17 @@ Memastikan sistem membuat konfigurasi default yang valid ketika aplikasi pertama
 
 ### Scenario 1.2: Atomic Persistence of Window Coordinates (Core Invariant / Normal Path)
 Memastikan pembaruan posisi jendela (X, Y, Width, Height) disimpan ke disk secara atomik menggunakan penulisan berkas temporer untuk mencegah korupsi data akibat interupsi tiba-tiba.
-- [ ] **Task 1.2a: [TEST] Write failing test for atomic coordinate persistence**
+- [x] **Task 1.2a: [TEST] Write failing test for atomic coordinate persistence** (`58180a2`)
   - **Fulfills**: `REQ-CONFIG-001`
   - **Files**: `[MODIFY] src-tauri/src/config/tests.rs`
   - **Commit**: `test(config): add failing test for atomic window coordinate persistence`
-  - **Verification**: `cargo test config::tests::test_save_window_position_atomic` (EXPECTED: FAIL / RED)
+  - **Verification**: `cargo test config::tests::test_save_window_position_atomic` (FAILED as expected: "not implemented")
 
-- [ ] **Task 1.2b: [FEAT] Implement atomic file write logic in ConfigStore**
+- [x] **Task 1.2b: [FEAT] Implement atomic file write logic in ConfigStore** (`a4b2d5f`)
   - **Fulfills**: `REQ-CONFIG-001`
   - **Files**: `[MODIFY] src-tauri/src/config/mod.rs`
   - **Commit**: `feat(config): implement atomic file write via temporary swap`
-  - **Verification**: `cargo test config::tests::test_save_window_position_atomic` (EXPECTED: PASS / GREEN)
+  - **Verification**: `cargo test config::tests::test_save_window_position_atomic` (PASSED / GREEN in 0.01s)
 
 ### Scenario 1.3: Corrupt Config Auto-Recovery (Error Path / Core Invariant)
 Memastikan host engine tidak crash jika berkas `config.json` rusak atau terpotong, melainkan membuat cadangan berkas lama (*backup*) dan memuat konfigurasi default yang bersih.
