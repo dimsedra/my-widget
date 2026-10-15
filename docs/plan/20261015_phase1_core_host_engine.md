@@ -3,15 +3,15 @@ title: Implementation Plan - Core Host Platform Engine
 type: plan
 parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
-status: completed
-total_tasks: 20
+status: in_progress
+total_tasks: 28
 completed_tasks: 20
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[████████████████]` **20 / 20 Tasks Completed (100%)**
+> **Progress Tracker:** `[███████████░░░░░]` **20 / 28 Tasks Completed (71%)**
 
 ---
 
@@ -193,6 +193,66 @@ Memverifikasi bahwa jendela shell merender latar belakang transparan dengan efek
   - **Verification**: `pnpm exec playwright test tests/visual/widget-shell.visual.spec.ts` (PASSED / GREEN in 0.39s)
 
 ---
+
+## Phase 5: Audit Hardening & Runtime Integration (AUDIT REMEDIATION)
+
+Menuntaskan temuan audit kode independen (`/audit`) untuk menutup celah integrasi runtime Tauri, memperbaiki persistensi berkas atomik tanpa celah kehilangan data, mengaktifkan `skipTaskbar`, dan menghubungkan siklus hidup pembuatan jendela fisik serta system tray live.
+
+### Scenario 5.1: Zero Data-Loss Atomic File Persistence & In-Memory Cache (Core Invariant / Optimization)
+Memperbaiki `ConfigStore::save_position` agar tidak menggunakan pola `remove_file` yang rentan kehilangan data saat crash mendadak, melainkan menggunakan `tempfile::NamedTempFile::persist`, serta menyimpan cache `AppConfig` di memori untuk menghindari re-deserialisasi I/O berulang pada setiap event mouse.
+- [ ] **Task 5.1a: [TEST] Write failing test asserting atomic overwrite without file deletion window and cached config mutation**
+  - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
+  - **Files**: `[MODIFY] src-tauri/src/config/tests.rs`
+  - **Commit**: `test(config): add test for zero data loss atomic persistence and memory cache`
+  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (EXPECTED: FAIL / RED)
+
+- [ ] **Task 5.1b: [FEAT] Implement NamedTempFile::persist and in-memory config caching in ConfigStore**
+  - **Fulfills**: `REQ-CONFIG-001`, `NFR-REL-002`
+  - **Files**: `[MODIFY] src-tauri/src/config/mod.rs`
+  - **Commit**: `feat(config): implement atomic persist via NamedTempFile and in-memory caching`
+  - **Verification**: `cargo test config::tests::test_atomic_overwrite_zero_loss` (EXPECTED: PASS / GREEN)
+
+### Scenario 5.2: Tauri Runtime Managed State & IPC Command Registration (Normal Path / Integration)
+Mendaftarkan state `Mutex<ConfigStore>` dan `Mutex<WindowManager>` ke `tauri::Builder::manage` dan meregistrasikan 4 handler perintah IPC (`cmd_load_window_config`, `cmd_save_window_position`, `cmd_open_widget`, `cmd_close_widget`) pada `invoke_handler` di `src-tauri/src/lib.rs`.
+- [ ] **Task 5.2a: [TEST] Write failing integration test verifying Tauri builder registers all commands and managed state**
+  - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
+  - **Files**: `[NEW] src-tauri/src/tests/runtime_integration_test.rs`
+  - **Commit**: `test(runtime): add failing test for registered IPC commands and managed state`
+  - **Verification**: `cargo test tests::runtime_integration_test` (EXPECTED: FAIL / RED)
+
+- [ ] **Task 5.2b: [FEAT] Wire managed states and IPC invoke handlers into Tauri Builder**
+  - **Fulfills**: `REQ-HOST-002`, `REQ-CONFIG-001`
+  - **Files**: `[MODIFY] src-tauri/src/lib.rs`
+  - **Commit**: `feat(runtime): wire managed states and register all IPC commands in lib.rs`
+  - **Verification**: `cargo test tests::runtime_integration_test` (EXPECTED: PASS / GREEN)
+
+### Scenario 5.3: Win32 Desktop Pinning, Taskbar Exemption, and Live Tray Wiring (Core Invariant / Integration)
+Mengaktifkan `"skipTaskbar": true` pada konfigurasi jendela Tauri dan menyambungkan fungsi Win32 `pin_window_to_desktop` serta inisialisasi menu System Tray native ke dalam lifecycle `setup` hook pada runtime Tauri.
+- [ ] **Task 5.3a: [TEST] Write failing test asserting skipTaskbar configuration and window setup hook registration**
+  - **Fulfills**: `REQ-HOST-001`, `REQ-HOST-003`
+  - **Files**: `[NEW] src-tauri/src/tests/tray_and_window_setup_test.rs`
+  - **Commit**: `test(platform): add failing test for window setup hook and tray initialization`
+  - **Verification**: `cargo test tests::tray_and_window_setup_test` (EXPECTED: FAIL / RED)
+
+- [ ] **Task 5.3b: [FEAT] Configure skipTaskbar and wire desktop pinning and live System Tray in setup hook**
+  - **Fulfills**: `REQ-HOST-001`, `REQ-HOST-003`
+  - **Files**: `[MODIFY] src-tauri/tauri.conf.json`, `[MODIFY] src-tauri/src/lib.rs`, `[MODIFY] src-tauri/src/tray/mod.rs`
+  - **Commit**: `feat(platform): wire window pinning, taskbar exemption, and live tray icon in setup hook`
+  - **Verification**: `cargo test tests::tray_and_window_setup_test` (EXPECTED: PASS / GREEN)
+
+### Scenario 5.4: Native WebviewWindow Spawning in WindowManager (Normal Path / ADR-003)
+Memperluas `WindowManager` agar dapat berinteraksi dengan `AppHandle` untuk memanggil `WebviewWindowBuilder`, sehingga pembuatan widget baru benar-benar menghasilkan jendela OS fisik yang transparan, tanpa dekorasi, dan terisolasi.
+- [ ] **Task 5.4a: [TEST] Write failing test for native window creation contract in WindowManager**
+  - **Fulfills**: `REQ-HOST-001`, `ADR-003`
+  - **Files**: `[MODIFY] src-tauri/src/window/tests.rs`
+  - **Commit**: `test(window): add failing test for native WebviewWindow spawning logic`
+  - **Verification**: `cargo test window::tests::test_native_window_spawning` (EXPECTED: FAIL / RED)
+
+- [ ] **Task 5.4b: [FEAT] Implement WebviewWindowBuilder spawning in WindowManager**
+  - **Fulfills**: `REQ-HOST-001`, `ADR-003`
+  - **Files**: `[MODIFY] src-tauri/src/window/mod.rs`
+  - **Commit**: `feat(window): implement native window spawning with transparent frameless styles`
+  - **Verification**: `cargo test window::tests::test_native_window_spawning` (EXPECTED: PASS / GREEN)
 
 ---
 
