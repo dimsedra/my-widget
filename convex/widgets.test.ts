@@ -70,4 +70,38 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
     });
     expect(allMatching).toHaveLength(1);
   });
+
+  it("should maintain strict data isolation between distinct widget instances", async () => {
+    const t = convexTest(schema, modules);
+
+    // Seed instance A
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "todo-alpha",
+      widgetType: "todo",
+      title: "Alpha Widget",
+      payload: { items: [{ id: "a1", text: "Alpha task", isCompleted: false }] },
+    });
+
+    // Seed instance B
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "countdown-beta",
+      widgetType: "countdown",
+      title: "Beta Countdown",
+      payload: { targetDate: 1893456000000, unit: "days" },
+    });
+
+    // Query instance B - must return Beta data, NOT Alpha data
+    const betaData = await t.query(api.widgets.get, { instanceId: "countdown-beta" });
+    expect(betaData).not.toBeNull();
+    expect(betaData?.instanceId).toBe("countdown-beta");
+    expect(betaData?.widgetType).toBe("countdown");
+    expect(betaData?.title).toBe("Beta Countdown");
+
+    // Query instance A - must return Alpha data
+    const alphaData = await t.query(api.widgets.get, { instanceId: "todo-alpha" });
+    expect(alphaData).not.toBeNull();
+    expect(alphaData?.instanceId).toBe("todo-alpha");
+    expect(alphaData?.widgetType).toBe("todo");
+    expect(alphaData?.title).toBe("Alpha Widget");
+  });
 });
