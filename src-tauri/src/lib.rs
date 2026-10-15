@@ -1,6 +1,7 @@
 pub mod commands;
 pub mod config;
 pub mod platform;
+pub mod tray;
 pub mod window;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
