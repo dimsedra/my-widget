@@ -1,5 +1,5 @@
 // Schema definition and index contract tests
-// Why: Enforces ADR-004 generic polymorphic table structure and indexes for performant query lookups.
+// Why: Enforces ADR-004 generic polymorphic table structure and indexes for performant query lookups without violating class encapsulation.
 import { describe, it, expect } from "vitest";
 import schema from "./schema";
 
