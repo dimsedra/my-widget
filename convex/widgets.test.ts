@@ -104,4 +104,12 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
     expect(alphaData?.widgetType).toBe("todo");
     expect(alphaData?.title).toBe("Alpha Widget");
   });
+
+  it("should return null cleanly when querying a non-existent instanceId (graceful null)", async () => {
+    const t = convexTest(schema, modules);
+
+    // Query non-existent instance - must return null without throwing
+    const result = await t.query(api.widgets.get, { instanceId: "non-existent-instance-xyz" });
+    expect(result).toBeNull();
+  });
 });
