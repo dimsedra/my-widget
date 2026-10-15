@@ -32,10 +32,21 @@ impl ConfigStore {
 
         let content = fs::read_to_string(&self.config_path)
             .map_err(|e| format!("failed to read config file: {}", e))?;
-        let config: AppConfig = serde_json::from_str(&content)
-            .map_err(|e| format!("failed to parse config json: {}", e))?;
+        match serde_json::from_str::<AppConfig>(&content) {
+            Ok(config) => Ok(config),
+            Err(_) => {
+                // NFR-REL-002: Safely recover from corrupt config by backing up old file and creating default
+                let backup_path = PathBuf::from(format!("{}.bak", self.config_path.display()));
+                let _ = fs::rename(&self.config_path, &backup_path);
 
-        Ok(config)
+                let default_config = AppConfig::default();
+                if let Ok(serialized) = serde_json::to_string_pretty(&default_config) {
+                    let _ = fs::write(&self.config_path, serialized);
+                }
+
+                Ok(default_config)
+            }
+        }
     }
 
     pub fn save_position(
