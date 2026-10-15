@@ -112,4 +112,37 @@ describe("Convex Widgets: Initial Upsert (Normal Path)", () => {
     const result = await t.query(api.widgets.get, { instanceId: "non-existent-instance-xyz" });
     expect(result).toBeNull();
   });
+
+  it("should return bounded list of widgets by type using take() limit", async () => {
+    const t = convexTest(schema, modules);
+
+    // Seed 5 widgets of type "todo"
+    for (let i = 1; i <= 5; i++) {
+      await t.mutation(api.widgets.updatePayload, {
+        instanceId: `todo-batch-${i}`,
+        widgetType: "todo",
+        title: `Todo ${i}`,
+        payload: { items: [] },
+      });
+    }
+
+    // Seed 1 widget of type "countdown"
+    await t.mutation(api.widgets.updatePayload, {
+      instanceId: "countdown-other",
+      widgetType: "countdown",
+      title: "Countdown Other",
+      payload: { targetDate: 12345 },
+    });
+
+    // Query listByType with limit = 3
+    const results = await t.query(api.widgets.listByType, {
+      widgetType: "todo",
+      limit: 3,
+    });
+
+    expect(results).toHaveLength(3);
+    for (const item of results) {
+      expect(item.widgetType).toBe("todo");
+    }
+  });
 });
