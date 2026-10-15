@@ -5,13 +5,13 @@ parent_prd: docs/prd/20261013_desktop_widget_platform.md
 parent_srs: docs/srs/20261013_desktop_widget_platform.md
 status: in_progress
 total_tasks: 20
-completed_tasks: 16
+completed_tasks: 18
 last_updated: 2026-10-15
 ---
 
 # Implementation Plan: Core Host Platform Engine (Phase 1)
 
-> **Progress Tracker:** `[█████████████░░░]` **16 / 20 Tasks Completed (80%)**
+> **Progress Tracker:** `[███████████████░]` **18 / 20 Tasks Completed (90%)**
 
 ---
 
@@ -166,17 +166,17 @@ Membangun fondasi antarmuka web (React + Vite + Tailwind CSS) untuk membungkus j
 
 ### Scenario 4.1: Drag Region Attribute and Position Save Dispatch (Normal Path / Core Invariant)
 Memastikan elemen pegangan geser di DOM memiliki atribut `data-tauri-drag-region` dan memicu IPC command `cmd_save_window_position` saat event mouseup terjadi.
-- [ ] **Task 4.1a: [TEST] Write failing component test for drag handle attributes and IPC dispatch**
+- [x] **Task 4.1a: [TEST] Write failing component test for drag handle attributes and IPC dispatch** (`54e547f`)
   - **Fulfills**: `REQ-HOST-002`
   - **Files**: `[NEW] src/components/WidgetShell.test.tsx`
-  - **Commit**: `test(ui): add failing test for WidgetShell drag handle and save dispatch`
-  - **Verification**: `pnpm test src/components/WidgetShell.test.tsx` (EXPECTED: FAIL / RED)
+  - **Commit**: `test(ui): add failing test for WidgetShell drag handle and mouseup IPC dispatch`
+  - **Verification**: `pnpm test src/components/WidgetShell.test.tsx` (FAILED as expected: cannot resolve WidgetShell)
 
-- [ ] **Task 4.1b: [FEAT] Implement WidgetShell component with drag region contract**
+- [x] **Task 4.1b: [FEAT] Implement WidgetShell component with drag region contract** (`d3afa7a`)
   - **Fulfills**: `REQ-HOST-002`
-  - **Files**: `[NEW] src/components/WidgetShell.tsx`
-  - **Commit**: `feat(ui): implement base WidgetShell container with drag region handler`
-  - **Verification**: `pnpm test src/components/WidgetShell.test.tsx` (EXPECTED: PASS / GREEN)
+  - **Files**: `[NEW] src/components/WidgetShell.tsx`, `[MODIFY] src/App.tsx`
+  - **Commit**: `feat(ui): implement WidgetShell wrapper with drag region and mouseup IPC dispatch`
+  - **Verification**: `pnpm test src/components/WidgetShell.test.tsx` (PASSED / GREEN in 1.78s)
 
 ### Scenario 4.2: Visual Shell Baseline Verification (Frosted Glass & Frameless Transparency)
 Memverifikasi bahwa jendela shell merender latar belakang transparan dengan efek kaca buram (*frosted glass / backdrop-blur*) tanpa dekorasi jendela bawaan OS.
