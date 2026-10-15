@@ -56,3 +56,33 @@ fn test_save_window_position_atomic() {
     assert!(!temp_file_path.exists(), "temporary swap file must not remain on disk");
 }
 
+#[test]
+fn test_corrupt_config_auto_recovery() {
+    let temp_dir = tempdir().expect("failed to create temp dir");
+    let config_path = temp_dir.path().join("config.json");
+
+    // Intentionally write corrupt/malformed JSON
+    std::fs::write(&config_path, "{ malformed json: true, broken...").expect("write corrupt config");
+
+    let mut store = ConfigStore::new(config_path.clone());
+    // Should NOT panic or return Err on corrupt config; must fallback to default config
+    let config = store
+        .load()
+        .expect("should safely recover from corrupt config and return default");
+
+    assert_eq!(config.version, 1);
+    assert!(config.instances.contains_key("todo_default"));
+
+    // Invariant: The corrupt file must be preserved as a backup: config.json.bak
+    let backup_path = temp_dir.path().join("config.json.bak");
+    assert!(backup_path.exists(), "backup of corrupt config must be created");
+
+    let backup_content = std::fs::read_to_string(&backup_path).expect("read backup");
+    assert_eq!(backup_content, "{ malformed json: true, broken...");
+
+    // The active config file must now contain the valid recovered JSON
+    let active_content = std::fs::read_to_string(&config_path).expect("read recovered config");
+    assert!(active_content.contains("\"version\": 1"));
+}
+
+
